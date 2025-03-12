@@ -7,6 +7,7 @@ A comprehensive backend system for a language self-study platform featuring voca
 - [Features](#features)
 - [Technical Stack](#technical-stack)
 - [System Architecture](#system-architecture)
+- [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
 - [Entity Relationships](#entity-relationships)
 - [Setup Instructions](#setup-instructions)
@@ -69,6 +70,101 @@ The application follows a standard layered architecture:
 5. **DTO Layer**: Data Transfer Objects for request/response handling
 6. **Security Layer**: Handles authentication and authorization
 7. **Exception Handling**: Global exception management
+
+## Project Structure
+
+```
+language-study-app/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── languagestudy/
+│   │   │           ├── config/
+│   │   │           │   ├── SecurityConfig.java
+│   │   │           │   ├── JwtConfig.java
+│   │   │           │   └── SwaggerConfig.java
+│   │   │           ├── controller/
+│   │   │           │   ├── UserController.java
+│   │   │           │   ├── LanguageController.java
+│   │   │           │   ├── WordController.java
+│   │   │           │   ├── SentenceController.java
+│   │   │           │   ├── QuizController.java
+│   │   │           │   ├── StudySessionController.java
+│   │   │           │   ├── AchievementController.java
+│   │   │           │   ├── LearningPathController.java
+│   │   │           │   └── StatisticsController.java
+│   │   │           ├── dto/
+│   │   │           │   ├── request/
+│   │   │           │   │   ├── UserRequest.java
+│   │   │           │   │   ├── LoginRequest.java
+│   │   │           │   │   ├── WordRequest.java
+│   │   │           │   │   └── ...
+│   │   │           │   └── response/
+│   │   │           │       ├── UserResponse.java
+│   │   │           │       ├── JwtResponse.java
+│   │   │           │       ├── StatsResponse.java
+│   │   │           │       └── ...
+│   │   │           ├── entity/
+│   │   │           │   ├── User.java
+│   │   │           │   ├── Language.java
+│   │   │           │   ├── Word.java
+│   │   │           │   ├── Sentence.java
+│   │   │           │   ├── UserProgress.java
+│   │   │           │   ├── StudySession.java
+│   │   │           │   ├── Achievement.java
+│   │   │           │   ├── UserAchievement.java
+│   │   │           │   ├── Quiz.java
+│   │   │           │   ├── QuizQuestion.java
+│   │   │           │   ├── QuizAttempt.java
+│   │   │           │   ├── LearningPath.java
+│   │   │           │   ├── LearningPathStep.java
+│   │   │           │   └── UserStatistics.java
+│   │   │           ├── repository/
+│   │   │           │   ├── UserRepository.java
+│   │   │           │   ├── LanguageRepository.java
+│   │   │           │   ├── WordRepository.java
+│   │   │           │   └── ...
+│   │   │           ├── service/
+│   │   │           │   ├── UserService.java
+│   │   │           │   ├── LanguageService.java
+│   │   │           │   ├── WordService.java
+│   │   │           │   ├── SentenceService.java
+│   │   │           │   ├── ProgressService.java
+│   │   │           │   ├── StudySessionService.java
+│   │   │           │   ├── AchievementService.java
+│   │   │           │   ├── QuizService.java
+│   │   │           │   ├── LearningPathService.java
+│   │   │           │   └── StatisticsService.java
+│   │   │           ├── exception/
+│   │   │           │   ├── GlobalExceptionHandler.java
+│   │   │           │   ├── ResourceNotFoundException.java
+│   │   │           │   ├── BadRequestException.java
+│   │   │           │   └── AuthenticationException.java
+│   │   │           ├── security/
+│   │   │           │   ├── JwtTokenProvider.java
+│   │   │           │   ├── JwtAuthenticationFilter.java
+│   │   │           │   └── UserDetailsServiceImpl.java
+│   │   │           ├── util/
+│   │   │           │   ├── ExperienceCalculator.java
+│   │   │           │   ├── LevelManager.java
+│   │   │           │   └── AchievementChecker.java
+│   │   │           └── LanguageStudyApplication.java
+│   │   └── resources/
+│   │       ├── application.properties
+│   │       ├── application-dev.properties
+│   │       ├── application-prod.properties
+│   │       └── data.sql
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── languagestudy/
+│                   ├── controller/
+│                   ├── service/
+│                   └── repository/
+├── pom.xml
+└── README.md
+```
 
 ## API Documentation
 
