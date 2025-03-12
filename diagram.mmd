@@ -1,0 +1,182 @@
+classDiagram
+    class User {
+        -Long id
+        -String username
+        -String email
+        -String password
+        -LocalDateTime createdAt
+        -LocalDateTime lastLogin
+        -Integer level
+        -Integer experiencePoints
+        +register() Boolean
+        +login() Boolean
+        +updateProfile() Boolean
+        +gainExperience(amount) void
+        +levelUp() void
+    }
+    
+    class Language {
+        -Long id
+        -String name
+        -String code
+        -String description
+        +getAll() List~Language~
+        +getById(id) Language
+    }
+    
+    class Word {
+        -Long id
+        -String original
+        -String translation
+        -String partOfSpeech
+        -Integer difficultyLevel
+        -LanguageId languageId
+        +create() Word
+        +update() Word
+        +delete(id) Boolean
+        +search(query) List~Word~
+    }
+    
+    class Sentence {
+        -Long id
+        -String original
+        -String translation
+        -Integer difficultyLevel
+        -LanguageId languageId
+        +create() Sentence
+        +update() Sentence
+        +delete(id) Boolean
+        +search(query) List~Sentence~
+    }
+    
+    class UserProgress {
+        -Long id
+        -Long userId
+        -Long itemId
+        -String itemType
+        -Integer mastery
+        -LocalDateTime lastReviewed
+        -Integer consecutive
+        +updateMastery(value) void
+        +resetConsecutive() void
+        +incrementConsecutive() void
+    }
+    
+    class StudySession {
+        -Long id
+        -Long userId
+        -LocalDateTime startTime
+        -LocalDateTime endTime
+        -Integer duration
+        -Integer totalItems
+        -Integer correctAnswers
+        -Integer experienceGained
+        +start() void
+        +end() void
+        +calculateExperience() Integer
+    }
+    
+    class Achievement {
+        -Long id
+        -String name
+        -String description
+        -String badge
+        -Integer experienceReward
+        +unlock(userId) void
+    }
+    
+    class UserAchievement {
+        -Long id
+        -Long userId
+        -Long achievementId
+        -LocalDateTime unlockedAt
+        +markAsRead() void
+    }
+    
+    class Quiz {
+        -Long id
+        -String title
+        -String description
+        -Integer difficultyLevel
+        -LanguageId languageId
+        -Integer experienceReward
+        +create() Quiz
+        +update() Quiz
+        +delete(id) Boolean
+        +attemptQuiz(userId) QuizAttempt
+    }
+    
+    class QuizQuestion {
+        -Long id
+        -Long quizId
+        -String question
+        -String correctAnswer
+        -List~String~ options
+        -Integer points
+        +create() QuizQuestion
+        +update() QuizQuestion
+        +delete(id) Boolean
+    }
+    
+    class QuizAttempt {
+        -Long id
+        -Long userId
+        -Long quizId
+        -Integer score
+        -LocalDateTime startTime
+        -LocalDateTime endTime
+        -Boolean completed
+        +start() void
+        +submit() Integer
+        +calculateScore() Integer
+    }
+    
+    class LearningPath {
+        -Long id
+        -String name
+        -String description
+        -LanguageId languageId
+        -Integer requiredLevel
+        +create() LearningPath
+        +update() LearningPath
+        +delete(id) Boolean
+    }
+    
+    class LearningPathStep {
+        -Long id
+        -Long learningPathId
+        -Integer order
+        -String type
+        -Long contentId
+        -Boolean required
+        +create() LearningPathStep
+        +update() LearningPathStep
+        +complete(userId) void
+    }
+    
+    class UserStatistics {
+        -Long id
+        -Long userId
+        -Integer wordsLearned
+        -Integer sentencesLearned
+        -Integer quizzesCompleted
+        -Integer totalStudyTime
+        -Integer streak
+        +updateStats() void
+        +updateStreak() void
+        +resetStreak() void
+    }
+    
+    User "1" -- "many" UserProgress
+    User "1" -- "many" StudySession
+    User "1" -- "many" UserAchievement
+    User "1" -- "many" QuizAttempt
+    User "1" -- "1" UserStatistics
+    Language "1" -- "many" Word
+    Language "1" -- "many" Sentence
+    Language "1" -- "many" Quiz
+    Language "1" -- "many" LearningPath
+    Quiz "1" -- "many" QuizQuestion
+    Quiz "1" -- "many" QuizAttempt
+    LearningPath "1" -- "many" LearningPathStep
+    Achievement "1" -- "many" UserAchievement
