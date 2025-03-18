@@ -34,6 +34,7 @@
     border-radius: 50%;
     margin-right: 15px;
     background-color: #ddd;
+    object-fit: cover;
 }
 
 .testimonial-name {

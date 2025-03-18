@@ -40,3 +40,34 @@ nav ul li a {
 nav ul li a:hover {
     color: #3498db;
 }
+
+.auth-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.login-btn, .register-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.login-btn {
+    color: white;
+    border: 1px solid #3498db;
+}
+
+.login-btn:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.register-btn {
+    background-color: #3498db;
+    color: white;
+}
+
+.register-btn:hover {
+    background-color: #2980b9;
+}

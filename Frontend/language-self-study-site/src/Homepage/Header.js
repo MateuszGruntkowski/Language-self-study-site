@@ -6,7 +6,7 @@ const Header = () => {
     <header>
       <div class="container nav-container">
         <a href="#" class="logo">
-          Angielski<span>Plus</span>
+          Fluent<span>Flow</span>
         </a>
         <nav>
           <ul>
@@ -24,6 +24,14 @@ const Header = () => {
             </li>
           </ul>
         </nav>
+        <div class="auth-buttons">
+          <a href="#login" class="login-btn">
+            Logowanie
+          </a>
+          <a href="#register" class="register-btn">
+            Rejestracja
+          </a>
+        </div>
       </div>
     </header>
   );

@@ -1,5 +1,6 @@
 import React from "react";
 import "./styles/Features.css";
+import girlLearningImage from "../assets/images/GirlLearning.png";
 
 const Features = () => {
   return (
@@ -51,10 +52,7 @@ const Features = () => {
             </a>
           </div>
           <div class="features-image">
-            <img
-              src="/api/placeholder/500/350"
-              alt="Nauka angielskiego online"
-            />
+            <img src={girlLearningImage} alt="Nauka angielskiego online" />
           </div>
         </div>
       </div>
