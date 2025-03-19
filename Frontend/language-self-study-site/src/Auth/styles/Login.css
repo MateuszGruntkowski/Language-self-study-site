@@ -1,0 +1,149 @@
+.login-page * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-page {
+    background-color: #f5f5f5;
+    background-image: linear-gradient(to bottom right, #f5f5f5, #e0f7fa);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.login-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+}
+
+.login-page .logo {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.login-page .logo span {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.login-page .logo span.accent {
+    color: #3498db;
+}
+
+.login-page h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.login-page .tagline {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.login-page .form-group {
+    margin-bottom: 25px;
+}
+
+.login-page label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+}
+
+.login-page .required {
+    color: #e74c3c;
+    margin-left: 3px;
+}
+
+.login-page input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.login-page input:focus {
+    border-color: #2196f3;
+    outline: none;
+}
+
+.login-page .remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.login-page .remember-me input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.login-page .login-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.login-page .forgot-password {
+    color: #2196f3;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.login-page .forgot-password:hover {
+    text-decoration: underline;
+}
+
+.login-page button {
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-page button:hover {
+    background-color: #0d8aee;
+}
+
+.login-page .register-link {
+    text-align: center;
+    margin-top: 20px;
+    color: #666;
+}
+
+.login-page .register-link a {
+    color: #2196f3;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-page .register-link a:hover {
+    text-decoration: underline;
+}
+
+.login-page .error {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 5px;
+}

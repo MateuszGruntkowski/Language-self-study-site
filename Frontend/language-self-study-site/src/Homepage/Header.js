@@ -26,9 +26,9 @@ const Header = () => {
           </ul>
         </nav>
         <div class="auth-buttons">
-          <a href="#login" class="login-btn">
+          <Link to="/login" class="login-btn">
             Logowanie
-          </a>
+          </Link>
           <Link to="/signup" class="register-btn">
             Rejestracja
           </Link>

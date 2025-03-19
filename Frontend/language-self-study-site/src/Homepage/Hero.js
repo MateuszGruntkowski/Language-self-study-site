@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import "./styles/Hero.css";
 
 const Hero = () => {
@@ -11,9 +13,9 @@ const Hero = () => {
           możliwości czasowych. Osiągnij swoje cele językowe szybciej niż
           myślisz!
         </p>
-        <a href="#" class="btn">
+        <Link to="/login" class="btn">
           Rozpocznij za darmo
-        </a>
+        </Link>
       </div>
     </section>
   );
