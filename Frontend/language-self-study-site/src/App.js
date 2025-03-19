@@ -1,11 +1,16 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Homepage from "./Homepage/Homepage.js";
+import SignUp from "./Auth/SignUp.js";
 
 const App = () => {
   return (
-    <>
-      <Homepage />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
+    </Router>
   );
 };
 
