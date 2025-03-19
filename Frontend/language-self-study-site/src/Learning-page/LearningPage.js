@@ -4,7 +4,7 @@ import Lessons from "./Lessons";
 import Ranking from "./Ranking";
 import FlashcardSection from "./FlashcardSection";
 import Footer from "../common/Footer";
-import Header from "../Homepage/Header";
+import Header from "../common/Header";
 
 import "./styles/LearningPage.css";
 
