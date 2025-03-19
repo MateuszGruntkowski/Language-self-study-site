@@ -4,6 +4,7 @@ import Homepage from "./Homepage/Homepage.js";
 import SignUp from "./Auth/SignUp.js";
 import Login from "./Auth/Login.js";
 import LearningPage from "./Learning-page/LearningPage.js";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const App = () => {
   return (
