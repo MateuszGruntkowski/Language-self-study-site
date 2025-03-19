@@ -1,8 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useRef, useEffect } from "react";
 import "./styles/SignUp.css";
 
 const SignUp = () => {
+  const firstNameRef = useRef(null);
+
+  useEffect(() => {
+    firstNameRef.current.focus();
+  }, []);
+
   return (
     <div className="signup-page">
       <div className="signup-container">
@@ -22,7 +29,13 @@ const SignUp = () => {
             <label htmlFor="first-name">
               Imię<span className="required">*</span>
             </label>
-            <input type="text" id="first-name" name="first-name" required />
+            <input
+              type="text"
+              id="first-name"
+              name="first-name"
+              ref={firstNameRef}
+              required
+            />
           </div>
 
           <div className="form-group">

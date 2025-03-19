@@ -1,8 +1,15 @@
-import React from "react";
+import React, { use } from "react";
 import "./styles/Login.css";
 import { Link } from "react-router-dom";
+import { useRef, useEffect } from "react";
 
 const Login = () => {
+  const emailRef = useRef(null);
+
+  useEffect(() => {
+    emailRef.current.focus();
+  }, []);
+
   return (
     <div class="login-page">
       <div class="login-container">
@@ -20,7 +27,13 @@ const Login = () => {
             <label for="email">
               Adres e-mail<span class="required">*</span>
             </label>
-            <input type="email" id="email" name="email" required />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              ref={emailRef}
+              required
+            />
             <div class="error" id="email-error"></div>
           </div>
 
