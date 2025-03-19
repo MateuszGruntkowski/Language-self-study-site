@@ -1,6 +1,6 @@
 .hero {
     background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), 
-    url("../../assets/images/London.png") center/cover no-repeat;
+    url("/public/images/homepage-images/London.png") center/cover no-repeat;
     background-position: center bottom -100px;
     color: white;
     padding: 150px 0;

@@ -1,8 +1,10 @@
 import React from "react";
 import "./styles/Testimonials.css";
-import avatarMan1 from "../assets/images/avatarMan1.png";
-import avatarMan2 from "../assets/images/avatarMan2.png";
-import avatarWoman1 from "../assets/images/avatarWoman1.png";
+// import avatarMan1 from "../../public/avatars/avatarMan1.png";
+// import avatarMan2 from "../../public/avatars/avatarMan2.png";
+// import avatarWoman1 from "../../public/avatars/avatarWoman1.png";
+// import avatarMan2 from "../assets/avatars/avatarMan2.png";
+// import avatarWoman1 from "../assets/avatars/avatarWoman1.png";
 
 const Testimonials = () => {
   return (
@@ -17,7 +19,7 @@ const Testimonials = () => {
               moich postępów!"
             </p>
             <div class="testimonial-author">
-              <img class="testimonial-avatar" src={avatarWoman1} />
+              <img class="testimonial-avatar" src="avatars/avatarWoman1.png" />
               <div>
                 <div class="testimonial-name">Anna Kowalska</div>
                 <div class="testimonial-role">
@@ -32,7 +34,7 @@ const Testimonials = () => {
               wynikiem B. Metoda naprawdę działa, polecam każdemu!"
             </p>
             <div class="testimonial-author">
-              <img class="testimonial-avatar" src={avatarMan1} />
+              <img class="testimonial-avatar" src="/avatars/avatarMan1.png" />
               <div>
                 <div class="testimonial-name">Marek Nowak</div>
                 <div class="testimonial-role">Student informatyki</div>
@@ -46,7 +48,7 @@ const Testimonials = () => {
               Wsparcie lektorów online jest nieocenione!"
             </p>
             <div class="testimonial-author">
-              <img class="testimonial-avatar" src={avatarMan2} />
+              <img class="testimonial-avatar" src="avatars/avatarMan2.png" />
               <div>
                 <div class="testimonial-name">Piotr Wiśniewski</div>
                 <div class="testimonial-role">Manager projektu</div>

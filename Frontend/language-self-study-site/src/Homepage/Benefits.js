@@ -1,8 +1,8 @@
 import React from "react";
 import "./styles/Benefits.css";
-import BetterCareerImg from "../assets/images/BetterCareer.png";
-import TravelsImg from "../assets/images/Travels.png";
-import StudyImg from "../assets/images/Study.png";
+// import BetterCareerImg from "../assets/images/BetterCareer.png";
+// import TravelsImg from "../assets/images/Travels.png";
+// import StudyImg from "../assets/images/Study.png";
 
 const Benefits = () => {
   return (
@@ -13,7 +13,7 @@ const Benefits = () => {
         <div class="benefit-row">
           <div class="benefit-image">
             <img
-              src={BetterCareerImg}
+              src="/images/homepage-images/BetterCareer.png"
               alt="Lepsza kariera zawodowa dzięki znajomości angielskiego"
             />
           </div>
@@ -42,13 +42,19 @@ const Benefits = () => {
             </p>
           </div>
           <div class="benefit-image">
-            <img src={TravelsImg} alt="Podróżowanie bez barier językowych" />
+            <img
+              src="/images/homepage-images/Travels.png"
+              alt="Podróżowanie bez barier językowych"
+            />
           </div>
         </div>
 
         <div class="benefit-row">
           <div class="benefit-image">
-            <img src={StudyImg} alt="Rozwój umysłowy dzięki nauce języka" />
+            <img
+              src="/images/homepage-images/Study.png"
+              alt="Rozwój umysłowy dzięki nauce języka"
+            />
           </div>
           <div class="benefit-content">
             <h3>Rozwój umysłowy</h3>
