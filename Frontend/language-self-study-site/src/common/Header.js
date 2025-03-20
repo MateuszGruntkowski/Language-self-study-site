@@ -36,6 +36,9 @@ const Header = () => {
           <li>
             <a href="#footer">Kontakt</a>
           </li>
+          <li>
+            <Link to="/my-profile">Mój profil</Link>
+          </li>
         </ul>
       );
     }
