@@ -1,0 +1,133 @@
+classDiagram
+    class User {
+        -Long id
+        -String username
+        -String email
+        -String password
+        -int totalXp
+        -Date createdAt
+        +getCompletedLessons()
+        +getFlashcards()
+        +addXp(int xp)
+        +getLeaderboardPosition()
+    }
+   
+    class UserStatistics {
+        -Long id
+        -int totalHoursSpent
+        -int dailyStreak
+        -Date lastActive
+        -int completedLessonsCount
+        -int completedExercisesCount
+        -int listenAndRepeatCount
+        -int sentenceArrangementCount
+        -int translationQuizCount
+        -int leaderboardRank
+        +updateDailyStreak()
+        +calculateTotalHours()
+        +incrementExerciseCount(String type)
+        +updateLeaderboardRank()
+    }
+   
+    class UserSession {
+        -Long id
+        -Date startTime
+        -Date endTime
+        -int sessionDurationMinutes
+        +calculateDuration()
+    }
+   
+    class Lesson {
+        -Long id
+        -String title
+        -String category
+        -int difficultyLevel
+        -int xpReward
+        -boolean isActive
+        +getExercises()
+    }
+   
+    class Exercise {
+        -Long id
+        -String type
+        -int orderInLesson
+        -int xpReward
+        +getContent()
+    }
+   
+    class ListenAndRepeatExercise {
+        -String audioUrl
+        -String textToRepeat
+        -String translation
+        +evaluateAnswer(String answer)
+    }
+   
+    class SentenceArrangementExercise {
+        -String correctSentence
+        -String[] wordOptions
+        -String translation
+        +evaluateAnswer(String[] arrangement)
+    }
+   
+    class TranslationQuizExercise {
+        -String question
+        -String[] options
+        -int correctOptionIndex
+        -String translation
+        +evaluateAnswer(int selectedOption)
+    }
+   
+    class Flashcard {
+        -Long id
+        -String frontContent
+        -String backContent
+        -Date createdAt
+        -int repetitionCount
+        +updateRepetitionCount()
+    }
+   
+    class UserLessonProgress {
+        -Long id
+        -Date startedAt
+        -Date completedAt
+        -int earnedXp
+        -boolean isCompleted
+        +markAsCompleted()
+    }
+   
+    class UserExerciseAttempt {
+        -Long id
+        -boolean isCorrect
+        -int attemptNumber
+        -Date attemptTime
+        -int earnedXp
+    }
+   
+    class Leaderboard {
+        -List~LeaderboardEntry~ entries
+        +getTopUsers(int limit)
+        +getUserRank(Long userId)
+        +updateLeaderboard()
+    }
+   
+    class LeaderboardEntry {
+        -Long userId
+        -String username
+        -int totalXp
+        -int rank
+    }
+
+
+    User "1" -- "1" UserStatistics : has
+    User "1" -- "many" UserSession : logs
+    User "1" -- "many" Flashcard : creates
+    User "1" -- "many" UserLessonProgress : has
+    Lesson "1" -- "many" Exercise : contains
+    Lesson "1" -- "many" UserLessonProgress : tracked in
+    Exercise <|-- ListenAndRepeatExercise : extends
+    Exercise <|-- SentenceArrangementExercise : extends
+    Exercise <|-- TranslationQuizExercise : extends
+    Exercise "1" -- "many" UserExerciseAttempt : has
+    UserLessonProgress "1" -- "many" UserExerciseAttempt : includes
+    Leaderboard "1" -- "many" LeaderboardEntry : contains
+    LeaderboardEntry "1" -- "1" User : represents

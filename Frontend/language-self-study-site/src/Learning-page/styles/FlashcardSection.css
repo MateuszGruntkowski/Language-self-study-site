@@ -1,0 +1,23 @@
+.learning-page .flashcard-section {
+    margin-bottom: 60px;
+}
+
+.learning-page .flashcard-button {
+    display: block;
+    background-color: #3498db;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+.learning-page .flashcard-button:hover {
+    background-color: #2980b9;
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+    transform: translateY(-3px);
+}

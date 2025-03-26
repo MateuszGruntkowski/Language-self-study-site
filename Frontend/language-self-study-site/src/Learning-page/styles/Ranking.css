@@ -1,0 +1,91 @@
+.learning-page .ranking-section {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin-bottom: 40px;
+}
+
+.learning-page .ranking-list {
+    list-style: none;
+}
+
+.learning-page .ranking-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    transition: transform 0.2s;
+}
+
+.learning-page .ranking-item:hover {
+    transform: translateX(5px);
+}
+
+.learning-page .ranking-item:last-child {
+    border-bottom: none;
+}
+
+.learning-page .ranking-position {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    margin-right: 15px;
+}
+
+.learning-page .top-position {
+    background-color: #ffd700;
+    color: #333;
+}
+
+.learning-page .second-position {
+    background-color: #c0c0c0;
+    color: #333;
+}
+
+.learning-page .third-position {
+    background-color: #cd7f32;
+    color: white;
+}
+
+.learning-page .user-info {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.learning-page .user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+}
+
+.learning-page .user-details {
+    flex-grow: 1;
+}
+
+.learning-page .user-name {
+    font-weight: 600;
+    margin-bottom: 3px;
+    color: #2c3e50;
+}
+
+.learning-page .user-level {
+    font-size: 13px;
+    color: #777;
+}
+
+.learning-page .user-xp {
+    font-weight: 600;
+    color: #3498db;
+    font-size: 16px;
+    margin-left: 10px;
+}
