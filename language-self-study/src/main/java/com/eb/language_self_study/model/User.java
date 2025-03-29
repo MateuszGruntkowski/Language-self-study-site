@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -16,17 +18,25 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long user_id;
     private String username;
     private String email;
     private String password;
-    private Integer totalXp = 0;
     private Date createdAt;
 
     private String profilePicName;
     private String profilePicType;
     @Lob
     private byte[] profilePicData;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserStatistics userStatistics;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FlashcardSet> flashcardSets;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserLessonProgress> userLessonProgresses;
 
     @PrePersist
     protected void onCreate() {
