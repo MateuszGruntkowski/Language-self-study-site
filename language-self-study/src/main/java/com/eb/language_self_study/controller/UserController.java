@@ -27,6 +27,11 @@ public class UserController {
         return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
 
+    @GetMapping("/users/{user_id}")
+    public ResponseEntity<User> getUser(@PathVariable Long user_id) {
+        return userService.getUserById(user_id);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(
             @RequestParam String userJson,

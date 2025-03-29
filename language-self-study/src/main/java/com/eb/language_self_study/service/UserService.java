@@ -3,6 +3,7 @@ package com.eb.language_self_study.service;
 import com.eb.language_self_study.model.User;
 import com.eb.language_self_study.model.dto.UserDto;
 import com.eb.language_self_study.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -72,5 +73,14 @@ public class UserService {
         }
 
         return topUsersList;
+    }
+
+    public ResponseEntity<User> getUserById(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
