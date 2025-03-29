@@ -21,7 +21,6 @@ public class UserStatistics {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private Integer leaderboardRank;
     private int totalHoursSpent = 0;
     private int totalXp = 0;
     private int dailyStreak = 0;

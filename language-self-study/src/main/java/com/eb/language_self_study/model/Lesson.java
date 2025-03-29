@@ -18,10 +18,9 @@ public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lesson_id;
-    private String title;
     private String category;
     private String description;
-    private int difficultyLevel;
+    private String difficultyLevel;
     private int xpReward;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)

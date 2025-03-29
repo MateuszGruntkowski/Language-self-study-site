@@ -1,6 +1,7 @@
 package com.eb.language_self_study.service;
 
 import com.eb.language_self_study.model.User;
+import com.eb.language_self_study.model.dto.UserDto;
 import com.eb.language_self_study.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -53,5 +57,20 @@ public class UserService {
             return jwtService.generateToken(user.getUsername());
         }
         return "User not authenticated";
+    }
+
+    public List<HashMap<String, Object>> getTopUsers() {
+        List<Object[]> topUsers = userRepository.findTop10Users();
+        List<HashMap<String, Object>> topUsersList = new ArrayList<>();
+
+        for (Object[] user : topUsers) {
+            HashMap<String, Object> userMap = new HashMap<>();
+            userMap.put("user_id", user[0]);
+            userMap.put("username", user[1]);
+            userMap.put("total_xp", user[2]);
+            topUsersList.add(userMap);
+        }
+
+        return topUsersList;
     }
 }

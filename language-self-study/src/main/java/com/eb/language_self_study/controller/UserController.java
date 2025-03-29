@@ -1,6 +1,7 @@
 package com.eb.language_self_study.controller;
 
 import com.eb.language_self_study.model.User;
+import com.eb.language_self_study.model.dto.UserDto;
 import com.eb.language_self_study.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -8,9 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
     private UserService userService;
@@ -44,5 +47,10 @@ public class UserController {
     public String login(@RequestBody User user) {
 
         return userService.verify(user);
+    }
+
+    @GetMapping("/top10users")
+    public ResponseEntity<List<HashMap<String, Object>>> getTop10Users() {
+        return new ResponseEntity<>(userService.getTopUsers(), HttpStatus.OK);
     }
 }
