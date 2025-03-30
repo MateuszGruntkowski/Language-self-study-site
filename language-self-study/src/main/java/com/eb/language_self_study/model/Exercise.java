@@ -15,7 +15,7 @@ public class Exercise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long exercise_id;
+    private Long exerciseId;
     private String type;
     private int xpReward;
     private int orderInLesson;

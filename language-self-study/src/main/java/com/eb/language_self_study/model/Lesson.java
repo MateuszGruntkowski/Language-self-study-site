@@ -17,7 +17,7 @@ public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long lesson_id;
+    private Long lessonId;
     private String category;
     private String description;
     private String difficultyLevel;

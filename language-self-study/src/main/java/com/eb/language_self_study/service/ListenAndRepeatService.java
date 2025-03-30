@@ -1,6 +1,5 @@
 package com.eb.language_self_study.service;
 
-import com.eb.language_self_study.model.Exercise;
 import com.eb.language_self_study.model.ListenAndRepeatExercise;
 import com.eb.language_self_study.model.dto.ListenAndRepeatExerciseDto;
 import com.eb.language_self_study.repository.ExerciseRepository;
@@ -16,10 +15,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class ListenAndRepeatService {
@@ -76,7 +71,7 @@ public class ListenAndRepeatService {
     public ListenAndRepeatExerciseDto getListenAndRepeatData(Long exerciseId) {
         ListenAndRepeatExercise exercise = findById(exerciseId);
 
-        listenAndRepeatExerciseDto.setExercise_id(exercise.getExercise_id());
+        listenAndRepeatExerciseDto.setExerciseId(exercise.getExerciseId());
         listenAndRepeatExerciseDto.setTextToRepeat(exercise.getTextToRepeat());
         listenAndRepeatExerciseDto.setTranslation(exercise.getTranslation());
 

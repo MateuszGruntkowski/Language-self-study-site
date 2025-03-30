@@ -17,7 +17,7 @@ public class FlashcardSet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long flashcardSet_id;
+    private Long flashcardSetId;
     private String name;
     private Date createdAt;
 

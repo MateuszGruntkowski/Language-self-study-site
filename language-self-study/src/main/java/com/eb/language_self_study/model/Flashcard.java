@@ -16,7 +16,7 @@ public class Flashcard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long flashcard_id;
+    private Long flashcardId;
     private String frontContent;
     private String backContent;
     private int repetitionCount;

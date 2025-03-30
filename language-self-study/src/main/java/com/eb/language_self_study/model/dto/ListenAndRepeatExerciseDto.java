@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @Component
 public class ListenAndRepeatExerciseDto {
-    private Long exercise_id;
+    private Long exerciseId;
     private String textToRepeat;
     private String translation;
     private String audioUrl;

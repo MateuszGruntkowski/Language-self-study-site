@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-    private Long user_id;
+    private Long userId;
     private String username;
     private String email;
     private Date createdAt;

@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,7 +81,7 @@ public class UserService {
 
         return topUsers.stream()
                 .map(user -> new UserLeaderboardEntryDto(
-                        user.getUser_id(),
+                        user.getUserId(),
                         user.getUsername(),
                         user.getUserStatistics().getTotalXp()))
                 .collect(Collectors.toList());

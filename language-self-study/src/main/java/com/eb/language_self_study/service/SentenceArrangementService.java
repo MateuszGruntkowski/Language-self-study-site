@@ -23,7 +23,7 @@ public class SentenceArrangementService {
                 (SentenceArrangementExercise) exerciseRepository.findById(exercise_id).orElse(null);
 
         assert exercise != null;
-        sentenceArrangementExerciseDto.setExerciseId(exercise.getExercise_id());
+        sentenceArrangementExerciseDto.setExerciseId(exercise.getExerciseId());
         sentenceArrangementExerciseDto.setCorrectSentence(exercise.getCorrectSentence());
         sentenceArrangementExerciseDto.setTranslation(exercise.getTranslation());
 
