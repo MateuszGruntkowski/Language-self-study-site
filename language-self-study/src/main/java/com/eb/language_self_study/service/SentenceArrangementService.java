@@ -12,10 +12,16 @@ public class SentenceArrangementService {
 
     private ExerciseRepository exerciseRepository;
     private SentenceArrangementExerciseDto sentenceArrangementExerciseDto;
+    private ObjectMapper objectMapper;
 
-    public SentenceArrangementService(ExerciseRepository exerciseRepository, SentenceArrangementExerciseDto sentenceArrangementExerciseDto){
+    public SentenceArrangementService(
+            ExerciseRepository exerciseRepository,
+            SentenceArrangementExerciseDto sentenceArrangementExerciseDto,
+            ObjectMapper objectMapper){
+
         this.exerciseRepository = exerciseRepository;
         this.sentenceArrangementExerciseDto = sentenceArrangementExerciseDto;
+        this.objectMapper = objectMapper;
     }
 
     public SentenceArrangementExerciseDto getSentenceArrangementData(Long exercise_id) {
@@ -26,8 +32,6 @@ public class SentenceArrangementService {
         sentenceArrangementExerciseDto.setExerciseId(exercise.getExerciseId());
         sentenceArrangementExerciseDto.setCorrectSentence(exercise.getCorrectSentence());
         sentenceArrangementExerciseDto.setTranslation(exercise.getTranslation());
-
-        ObjectMapper objectMapper = new ObjectMapper();
 
         String[] wordOptions;
         try {
