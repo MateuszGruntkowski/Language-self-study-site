@@ -1,11 +1,11 @@
 package com.eb.language_self_study.repository;
-
 import com.eb.language_self_study.model.User;
+import com.eb.language_self_study.model.dto.UserLeaderboardEntryDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Repository
@@ -23,10 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    """, nativeQuery = true)
 //    int findUserRank(@Param("userId") Long userId);
 
-    @Query(value = """
-        SELECT u.user_id, u.username, us.total_xp FROM users u
-        JOIN user_statistics us ON u.user_id = us.user_id
-        ORDER BY us.total_xp DESC LIMIT 10
-    """, nativeQuery = true)
-    List<Object[]> findTop10Users();
+    @Query("SELECT u FROM User u JOIN FETCH u.userStatistics ORDER BY u.userStatistics.totalXp DESC")
+    List<User> findTopUsersByXp(Pageable pageable);
 }

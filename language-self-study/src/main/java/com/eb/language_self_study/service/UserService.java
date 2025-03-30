@@ -2,7 +2,9 @@ package com.eb.language_self_study.service;
 
 import com.eb.language_self_study.model.User;
 import com.eb.language_self_study.model.dto.UserDto;
+import com.eb.language_self_study.model.dto.UserLeaderboardEntryDto;
 import com.eb.language_self_study.repository.UserRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +18,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -60,21 +63,6 @@ public class UserService {
         return "User not authenticated";
     }
 
-    public List<HashMap<String, Object>> getTopUsers() {
-        List<Object[]> topUsers = userRepository.findTop10Users();
-        List<HashMap<String, Object>> topUsersList = new ArrayList<>();
-
-        for (Object[] user : topUsers) {
-            HashMap<String, Object> userMap = new HashMap<>();
-            userMap.put("user_id", user[0]);
-            userMap.put("username", user[1]);
-            userMap.put("total_xp", user[2]);
-            topUsersList.add(userMap);
-        }
-
-        return topUsersList;
-    }
-
     public ResponseEntity<User> getUserById(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {
@@ -82,5 +70,16 @@ public class UserService {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    public List<UserLeaderboardEntryDto> getTopUsers() {
+        List<User> topUsers = userRepository.findTopUsersByXp(PageRequest.of(0, 10));
+
+        return topUsers.stream()
+                .map(user -> new UserLeaderboardEntryDto(
+                        user.getUser_id(),
+                        user.getUsername(),
+                        user.getUserStatistics().getTotalXp()))
+                .collect(Collectors.toList());
     }
 }

@@ -2,6 +2,7 @@ package com.eb.language_self_study.controller;
 
 import com.eb.language_self_study.model.User;
 import com.eb.language_self_study.model.dto.UserDto;
+import com.eb.language_self_study.model.dto.UserLeaderboardEntryDto;
 import com.eb.language_self_study.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -55,7 +56,8 @@ public class UserController {
     }
 
     @GetMapping("/top10users")
-    public ResponseEntity<List<HashMap<String, Object>>> getTop10Users() {
+    public ResponseEntity<List<UserLeaderboardEntryDto>> getTop10Users() {
         return new ResponseEntity<>(userService.getTopUsers(), HttpStatus.OK);
     }
+
 }
