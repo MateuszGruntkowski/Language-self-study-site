@@ -24,12 +24,12 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<UserDto>> getUsers() {
         return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/users/{user_id}")
-    public ResponseEntity<User> getUser(@PathVariable Long user_id) {
+    public ResponseEntity<UserDto> getUser(@PathVariable Long user_id) {
         return userService.getUserById(user_id);
     }
 

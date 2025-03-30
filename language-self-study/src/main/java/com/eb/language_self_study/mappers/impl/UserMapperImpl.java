@@ -4,7 +4,9 @@ import com.eb.language_self_study.mappers.Mapper;
 import com.eb.language_self_study.model.User;
 import com.eb.language_self_study.model.dto.UserDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserMapperImpl implements Mapper<UserDto, User> {
 
     ModelMapper modelMapper;

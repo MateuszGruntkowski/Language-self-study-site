@@ -1,5 +1,6 @@
 package com.eb.language_self_study.service;
 
+import com.eb.language_self_study.mappers.impl.UserMapperImpl;
 import com.eb.language_self_study.model.User;
 import com.eb.language_self_study.model.dto.UserDto;
 import com.eb.language_self_study.model.dto.UserLeaderboardEntryDto;
@@ -27,15 +28,18 @@ public class UserService {
     private JwtService jwtService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     AuthenticationManager authenticationManager;
+    private UserMapperImpl userMapper;
 
     public UserService(UserRepository userRepository,
                        BCryptPasswordEncoder bCryptPasswordEncoder,
                        AuthenticationManager authenticationManager,
-                       JwtService jwtService) {
+                       JwtService jwtService,
+                       UserMapperImpl userMapper) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.userMapper = userMapper;
     }
 
     public User register(User user, MultipartFile imageFile) throws IOException {
@@ -49,8 +53,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(user -> userMapper.mapToDto(user)).collect(Collectors.toList());
     }
 
     public String verify(User user) {
@@ -63,10 +68,12 @@ public class UserService {
         return "User not authenticated";
     }
 
-    public ResponseEntity<User> getUserById(Long userId) {
+    public ResponseEntity<UserDto> getUserById(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
+        UserDto userDto = userMapper.mapToDto(user);
+
         if (user != null) {
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(userDto);
         } else {
             return ResponseEntity.notFound().build();
         }

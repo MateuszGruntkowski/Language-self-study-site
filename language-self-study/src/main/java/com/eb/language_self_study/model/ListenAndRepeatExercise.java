@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "ListenAndRepeatExercises")
 public class ListenAndRepeatExercise extends Exercise {
 
-    private String audioUrl;
     private String textToRepeat;
     private String translation;
 }
