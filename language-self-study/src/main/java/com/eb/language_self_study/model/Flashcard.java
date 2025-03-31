@@ -1,5 +1,6 @@
 package com.eb.language_self_study.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +26,7 @@ public class Flashcard {
 
     @ManyToOne
     @JoinColumn(name = "flashcardSet_id", nullable = false)
+    @JsonBackReference
     private FlashcardSet flashcardSet;
 
     @PrePersist
