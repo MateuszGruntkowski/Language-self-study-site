@@ -1,6 +1,7 @@
 package com.eb.language_self_study.controller;
 
 import com.eb.language_self_study.model.FlashcardSet;
+import com.eb.language_self_study.model.dto.FlashcardSetDto;
 import com.eb.language_self_study.service.FlashcardSetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,41 +19,39 @@ public class FlashcardSetController {
         this.flashcardSetService = flashcardSetService;
     }
 
-    @GetMapping("/flashcard-sets/{user_id}")
-    public ResponseEntity<List<FlashcardSet>> getFlashcardSetsByUser(@PathVariable Long user_id){
+    @GetMapping("/users/{userId}/flashcard-sets")
+    public ResponseEntity<List<FlashcardSetDto>> getUserFlashcardSets(@PathVariable Long userId){
 
-        List<FlashcardSet> flashcardSets = flashcardSetService.findByUserId(user_id);
+        List<FlashcardSetDto> flashcardSets = flashcardSetService.getFlashcardSetsByUserId(userId);
         return new ResponseEntity<>(flashcardSets, HttpStatus.OK);
     }
 
-    @PostMapping("/flashcard-sets")
-    public ResponseEntity<FlashcardSet> createFlashcardSet(@RequestBody FlashcardSet flashcardSet){
-        if (flashcardSet == null) {
+    @PostMapping("/users/{userId}/flashcard-sets")
+    public ResponseEntity<FlashcardSetDto> createFlashcardSet(
+            @PathVariable Long userId,
+            @RequestBody FlashcardSetDto flashcardSetDto){
+        if (flashcardSetDto == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(flashcardSetService.createFlashcardSet(flashcardSet), HttpStatus.CREATED);
+        return new ResponseEntity<>(flashcardSetService.createFlashcardSet(userId, flashcardSetDto), HttpStatus.CREATED);
 
     }
 
-    @DeleteMapping("/flashcard-sets/{flashcardSetId}")
-    public ResponseEntity<Void> deleteFlashcardSet(@PathVariable Long flashcardSetId){
-        if (!flashcardSetService.isExists(flashcardSetId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        flashcardSetService.deleteFlashcardSet(flashcardSetId);
+    @DeleteMapping("/users/{userId}/flashcard-sets/{setId}")
+    public ResponseEntity<Void> deleteFlashcardSet(
+            @PathVariable Long setId,
+            @PathVariable Long userId){
+        flashcardSetService.deleteFlashcardSet(userId, setId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/flashcard-sets/{flashcardSetId}")
-    public ResponseEntity<FlashcardSet> updateFlashcardSet(
-            @RequestBody FlashcardSet flashcardSet,
-            @PathVariable Long flashcardSetId){
+    @PutMapping("/users/{userId}/flashcard-sets/{setId}")
+    public ResponseEntity<FlashcardSetDto> updateFlashcardSet(
+            @RequestBody FlashcardSetDto flashcardSetDto,
+            @PathVariable Long setId,
+            @PathVariable Long userId){
 
-        if(!flashcardSetService.isExists(flashcardSetId)){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        flashcardSet.setFlashcardSetId(flashcardSetId);
-        return new ResponseEntity<>(flashcardSetService.updateFlashcardSet(flashcardSet), HttpStatus.OK);
+        return new ResponseEntity<>(flashcardSetService.updateFlashcardSet(userId, setId, flashcardSetDto), HttpStatus.OK);
     }
 
 }

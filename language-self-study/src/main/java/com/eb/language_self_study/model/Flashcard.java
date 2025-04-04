@@ -33,4 +33,16 @@ public class Flashcard {
     protected void onCreate() {
         this.createdAt = new Date();
     }
+
+    @Override
+    public String toString() {
+        return "Flashcard{" +
+                "id=" + flashcardId +
+                ", frontContent='" + frontContent + '\'' +
+                ", backContent='" + backContent + '\'' +
+                ", flashcardSetId=" + (flashcardSet != null ? flashcardSet.getFlashcardSetId() : null) +
+                '}';
+    }
+
+
 }
