@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface FlashcardSetRepository extends JpaRepository<FlashcardSet, Long> {
     List<FlashcardSet> findFlashcardSetByUserUserId(Long userId);
-    // Custom query methods can be defined here if needed
-    // For example, to find a FlashcardSet by its name:
-    // Optional<FlashcardSet> findByName(String name);
+
+    boolean existsByFlashcardSetIdAndUserUserId(Long setId, Long userId);
+
 }

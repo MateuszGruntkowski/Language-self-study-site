@@ -30,7 +30,7 @@ public class UserController {
 
     @GetMapping("/users/{user_id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long user_id) {
-        return userService.getUserById(user_id);
+        return new ResponseEntity<>(userService.getUserById(user_id), HttpStatus.OK);
     }
 
     @PostMapping("/register")

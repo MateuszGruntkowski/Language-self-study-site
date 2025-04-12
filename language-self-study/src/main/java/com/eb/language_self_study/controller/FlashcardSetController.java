@@ -26,6 +26,14 @@ public class FlashcardSetController {
         return new ResponseEntity<>(flashcardSets, HttpStatus.OK);
     }
 
+    @GetMapping("/users/{userId}/flashcard-sets/{setId}")
+    public ResponseEntity<FlashcardSetDto> getFlashcardSetById(
+            @PathVariable Long userId,
+            @PathVariable Long setId){
+        FlashcardSetDto flashcardSet = flashcardSetService.getFlashcardSetById(userId, setId);
+        return new ResponseEntity<>(flashcardSet, HttpStatus.OK);
+    }
+
     @PostMapping("/users/{userId}/flashcard-sets")
     public ResponseEntity<FlashcardSetDto> createFlashcardSet(
             @PathVariable Long userId,

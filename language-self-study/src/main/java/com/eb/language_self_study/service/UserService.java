@@ -1,5 +1,6 @@
 package com.eb.language_self_study.service;
 
+import com.eb.language_self_study.exceptions.ResourceNotFoundException;
 import com.eb.language_self_study.mappers.impl.UserMapperImpl;
 import com.eb.language_self_study.model.User;
 import com.eb.language_self_study.model.dto.UserDto;
@@ -65,15 +66,11 @@ public class UserService {
         return "User not authenticated";
     }
 
-    public ResponseEntity<UserDto> getUserById(Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
-        UserDto userDto = userMapper.mapToDto(user);
+    public UserDto getUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if (user != null) {
-            return ResponseEntity.ok(userDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return userMapper.mapToDto(user);
     }
 
     public List<UserLeaderboardEntryDto> getTopUsers() {
@@ -85,5 +82,9 @@ public class UserService {
                         user.getUsername(),
                         user.getUserStatistics().getTotalXp()))
                 .collect(Collectors.toList());
+    }
+
+    public boolean userExists(Long userId) {
+        return userRepository.existsById(userId);
     }
 }
