@@ -6,6 +6,7 @@ import Login from "./Auth/Login.js";
 import LearningPage from "./Learning-page/LearningPage.js";
 import MyProfile from "./My-profile/MyProfile.js";
 import LessonDetailsPage from "./Lesson-Details-Page/LessonDetailsPage.js";
+import ListenRepeatAndRepeatPage from "./Listen-and-Repeat/ListenAndRepeatPage.js";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -18,7 +19,11 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/learn" element={<LearningPage />} />
         <Route path="/my-profile" element={<MyProfile />} />
-        <Route path="/Lesson-Details/1" element={<LessonDetailsPage />} />
+        <Route path="/Lesson-Details/id" element={<LessonDetailsPage />} />
+        <Route
+          path="/Listen-and-Repeat/id"
+          element={<ListenRepeatAndRepeatPage />}
+        />
       </Routes>
     </Router>
   );
