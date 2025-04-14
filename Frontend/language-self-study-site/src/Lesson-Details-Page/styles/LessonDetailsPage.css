@@ -1,0 +1,17 @@
+.lesson-detail-page {
+  background-color: #f5f7fa;
+  padding: 40px 0;
+}
+
+.lesson-detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .lesson-detail-page {
+    padding: 20px 0;
+  }
+}

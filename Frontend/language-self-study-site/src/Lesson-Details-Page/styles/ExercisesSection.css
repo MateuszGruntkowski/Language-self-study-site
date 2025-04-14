@@ -1,0 +1,45 @@
+.lesson-detail-content {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  padding: 40px;
+  margin-bottom: 40px;
+}
+
+.lesson-exercises-title {
+  font-size: 24px;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.lesson-exercises-title:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #3498db;
+}
+
+.lesson-exercises-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  width: 100%;
+}
+
+/* Responsive Styles for Exercises Grid */
+@media (max-width: 1024px) {
+  .lesson-exercises-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .lesson-exercises-grid {
+    grid-template-columns: 1fr;
+  }
+}

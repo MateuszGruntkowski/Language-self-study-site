@@ -1,0 +1,42 @@
+.lesson-detail-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.lesson-detail-title {
+  font-size: 36px;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.lesson-detail-title:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background-color: #3498db;
+}
+
+.lesson-detail-description {
+  font-size: 18px;
+  color: #555;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.lesson-detail-tag {
+  display: inline-block;
+  background-color: #e1f5fe;
+  color: #0288d1;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 15px;
+}
