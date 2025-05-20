@@ -8,6 +8,7 @@ import MyProfile from "./My-profile/MyProfile.js";
 import LessonDetailsPage from "./Lesson-Details-Page/LessonDetailsPage.js";
 import ListenRepeatAndRepeatPage from "./Listen-and-Repeat/ListenAndRepeatPage.js";
 import SentenceBuilder from "./Sentence-Building/SentenceBuilder.js";
+import Quiz from "./Quiz/Quiz.js";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -26,6 +27,7 @@ const App = () => {
           element={<ListenRepeatAndRepeatPage />}
         />
         <Route path="/Sentence-Building/id" element={<SentenceBuilder />} />
+        <Route path="/Quiz/id" element={<Quiz />} />
       </Routes>
     </Router>
   );
