@@ -1,14 +1,102 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./styles/SignUp.css";
 
 const SignUp = () => {
-  const firstNameRef = useRef(null);
+  const usernameRef = useRef(null);
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [imageFile, setImageFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
-    firstNameRef.current.focus();
+    usernameRef.current.focus();
   }, []);
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setImageFile(file);
+
+      // Tworzenie podglądu zdjęcia
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setPreviewImage(null);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    const { username, email, password, confirmPassword } = formData;
+
+    if (password !== confirmPassword) {
+      setError("Hasła się nie zgadzają.");
+      return;
+    }
+
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append(
+        "userJson",
+        JSON.stringify({
+          username,
+          email,
+          password,
+        })
+      );
+
+      if (imageFile) {
+        formDataToSend.append("imageFile", imageFile);
+      }
+
+      const response = await axios.post(
+        "http://localhost:8080/api/register",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        setSuccess("Rejestracja zakończona sukcesem!");
+        setTimeout(() => navigate("/login"), 2000); // przekieruj po 2 sek.
+      }
+    } catch (err) {
+      const msg =
+        err.response?.data?.message ||
+        "Wystąpił błąd podczas rejestracji. Spróbuj ponownie.";
+      setError(msg);
+    }
+  };
 
   return (
     <div className="signup-page">
@@ -24,34 +112,97 @@ const SignUp = () => {
           Rozpocznij swoją przygodę z językiem angielskim już dziś!
         </p>
 
-        <form id="registration-form">
+        <form id="registration-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="first-name">
-              Imię<span className="required">*</span>
+            <label htmlFor="username">
+              Nazwa użytkownika<span className="required">*</span>
             </label>
             <input
               type="text"
-              id="first-name"
-              name="first-name"
-              ref={firstNameRef}
+              id="username"
+              name="username"
+              ref={usernameRef}
+              value={formData.username}
+              onChange={handleChange}
               required
             />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="last-name">
-              Nazwisko<span className="required">*</span>
-            </label>
-            <input type="text" id="last-name" name="last-name" required />
           </div>
 
           <div className="form-group">
             <label htmlFor="email">
               Adres e-mail<span className="required">*</span>
             </label>
-            <input type="email" id="email" name="email" required />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
           </div>
 
+          <div className="form-group">
+            <label htmlFor="password">
+              Hasło<span className="required">*</span>
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="confirmPassword">
+              Potwierdź hasło<span className="required">*</span>
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* Dodanie pola do wyboru zdjęcia profilowego */}
+          <div className="form-group profile-photo-section">
+            <label htmlFor="profilePhoto">
+              Zdjęcie profilowe <span className="optional">(opcjonalne)</span>
+            </label>
+            <input
+              type="file"
+              id="profilePhoto"
+              name="profilePhoto"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="file-input"
+            />
+
+            {previewImage && (
+              <div className="image-preview-container">
+                <img
+                  src={previewImage}
+                  alt="Podgląd zdjęcia profilowego"
+                  className="image-preview"
+                />
+                <button
+                  type="button"
+                  className="remove-image-btn"
+                  onClick={removeImage}
+                >
+                  Usuń zdjęcie
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Pole wyboru poziomu językowego i celu nauki – na razie pomijane w POST */}
           <div className="language-choice">
             <div className="form-group">
               <label htmlFor="current-level">
@@ -85,37 +236,8 @@ const SignUp = () => {
             </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">
-              Hasło<span className="required">*</span>
-            </label>
-            <input type="password" id="password" name="password" required />
-            <div className="error" id="password-error"></div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="confirm-password">
-              Potwierdź hasło<span className="required">*</span>
-            </label>
-            <input
-              type="password"
-              id="confirm-password"
-              name="confirm-password"
-              required
-            />
-            <div className="error" id="confirm-password-error"></div>
-          </div>
-
-          <div className="benefits">
-            <h3>Korzyści z rejestracji:</h3>
-            <ul>
-              <li>Dostęp do wielu interaktywnych lekcji</li>
-              <li>Ćwiczenia z wymowy i słownictwa</li>
-              <li>Materiały dostosowane do Twojego poziomu</li>
-              <li>Śledzenie postępów i statystyki nauki</li>
-              <li>Dostęp z dowolnego urządzenia</li>
-            </ul>
-          </div>
+          {error && <div className="error">{error}</div>}
+          {success && <div className="success">{success}</div>}
 
           <p className="required-fields-note">
             <span className="required">*</span> - pola obowiązkowe

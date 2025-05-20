@@ -1,14 +1,67 @@
-import React, { use } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./styles/Login.css";
-import { Link } from "react-router-dom";
-import { useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
-  const emailRef = useRef(null);
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  axios.defaults.withCredentials = true;
+
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const usernameRef = useRef(null);
 
   useEffect(() => {
-    emailRef.current.focus();
+    usernameRef.current.focus();
   }, []);
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { username, password } = formData;
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/login",
+        {
+          username,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        navigate("/learn"); // przekieruj po 1 sek.
+
+        const token = response.data;
+        localStorage.setItem("token", token);
+
+        console.log("Zalogowano pomyślnie:", response.data);
+        // Ustawienie tokena w nagłówkach axios
+        // axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      }
+    } catch (error) {
+      console.error("Błąd logowania:", error);
+      setError("Niepoprawne dane logowania");
+    }
+  };
 
   return (
     <div class="login-page">
@@ -22,27 +75,35 @@ const Login = () => {
         <h1>Logowanie</h1>
         <p class="tagline">Kontynuuj swoją naukę języka angielskiego</p>
 
-        <form id="login-form">
+        <form id="login-form" onSubmit={handleSubmit}>
           <div class="form-group">
             <label for="email">
-              Adres e-mail<span class="required">*</span>
+              Username<span class="required">*</span>
             </label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              ref={emailRef}
+              type="username"
+              id="username"
+              name="username"
+              ref={usernameRef}
+              value={formData.username}
+              onChange={handleChange}
               required
             />
-            <div class="error" id="email-error"></div>
           </div>
 
           <div class="form-group">
             <label for="password">
               Hasło<span class="required">*</span>
             </label>
-            <input type="password" id="password" name="password" required />
-            <div class="error" id="password-error"></div>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            {error && <div className="error">{error}</div>}
           </div>
 
           <div class="login-actions">

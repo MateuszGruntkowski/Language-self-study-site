@@ -50,14 +50,14 @@ const Header = () => {
           Fluent<span>Flow</span>
         </Link>
         <nav>{renderNavLinks()}</nav>
-        <div class="auth-buttons">
+        {/* <div class="auth-buttons">
           <Link to="/login" class="login-btn">
             Logowanie
           </Link>
           <Link to="/signup" class="register-btn">
             Rejestracja
           </Link>
-        </div>
+        </div> */}
       </div>
     </header>
   );

@@ -8,7 +8,7 @@ const EditProfile = () => {
 
       <form>
         <div class="form-group">
-          <label for="first-name">First Name</label>
+          <label for="first-name">Username</label>
           <input
             type="text"
             id="first-name"
@@ -17,10 +17,10 @@ const EditProfile = () => {
           />
         </div>
 
-        <div class="form-group">
+        {/* <div class="form-group">
           <label for="last-name">Last Name</label>
           <input type="text" id="last-name" class="form-control" value="Doe" />
-        </div>
+        </div> */}
 
         <div class="form-group">
           <label for="email">Email</label>

@@ -1,10 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LessonCard from "./LessonCard";
-import lessons from "./data/lessons-data";
+import { getLessonsData } from "./data/lessons-data";
 
 import "./styles/Lessons.css";
 
 const Lessons = () => {
+  const [lessons, setLessons] = useState([]);
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        const lessons = await getLessonsData();
+        console.log("Pobrane lekcje:", lessons);
+        setLessons(lessons);
+      } catch (err) {
+        console.error("Błąd:", err);
+      }
+    };
+
+    fetchLessons();
+  }, []);
+
   return (
     <section className="lessons-section" id="lessons">
       <div className="section-header">
