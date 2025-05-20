@@ -45,7 +45,7 @@ const ListenRepeatAndRepeatPage = () => {
   const nextExerciseRef = useRef(null);
   const showNextExerciseButton = () => {
     if (currentIndex === totalWords - 1) {
-      nextExerciseRef.current.style.display = "block";
+      nextExerciseRef.current.style.display = "flex";
     } else {
       nextExerciseRef.current.style.display = "none";
     }
@@ -111,11 +111,7 @@ const ListenRepeatAndRepeatPage = () => {
           </button>
         </div>
 
-        <div
-          className="lr-next-exercise-container"
-          style={{ display: "none" }}
-          ref={nextExerciseRef}
-        >
+        <div className="lr-next-exercise-container" ref={nextExerciseRef}>
           <button
             onClick={goToNextExercise}
             className="lr-next-exercise-button"

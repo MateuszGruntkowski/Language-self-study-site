@@ -1,0 +1,45 @@
+.controls-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.check-button {
+  background-color: #3b82f6;
+  color: white;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border: none;
+  transition: background-color 0.2s;
+  font-size: 1.125rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.check-button:hover {
+  background-color: #2563eb;
+}
+
+.reset-button {
+  background-color: #ef4444;
+  color: white;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border: none;
+  transition: background-color 0.2s;
+  font-size: 1.125rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.reset-button:hover {
+  background-color: #dc2626;
+}

@@ -1,0 +1,29 @@
+/* SentenceArea.css */
+.sentence-area {
+  min-height: 6rem;
+  border: 2px dashed #d1d5db;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f9fafb;
+}
+
+.sentence-word {
+  background-color: #1f2937;
+  color: white;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 9999px;
+  cursor: move;
+}
+
+.sentence-word:hover {
+  background-color: #374151;
+}

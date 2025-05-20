@@ -1,0 +1,21 @@
+.navigation-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.navigation-button {
+  background-color: #1f2937;
+  color: white;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.navigation-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
