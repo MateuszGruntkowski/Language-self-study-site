@@ -29,12 +29,17 @@ const Dashboard = () => {
       </div>
 
       <div class="streak-card">
-        <div class="streak-title">Daily Streak</div>
+        <div class="streak-title">
+          <span style={{ color: "#555555" }}>Daily Streak</span>
+        </div>
         <div class="streak-value">14 Days</div>
       </div>
 
       <div class="rank-card">
-        <div class="rank-title">Leaderboard Position</div>
+        <div class="rank-title">
+          {" "}
+          <span style={{ color: "#555555" }}>Leaderboard Position</span>
+        </div>
         <div class="rank-value">#42</div>
       </div>
     </div>
