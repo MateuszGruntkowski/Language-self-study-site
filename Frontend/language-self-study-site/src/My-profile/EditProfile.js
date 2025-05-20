@@ -1,19 +1,19 @@
 import React from "react";
 import "./styles/EditProfile.css";
 
-const EditProfile = () => {
+const EditProfile = ({ user }) => {
   return (
     <div class="edit-profile">
       <h2 class="edit-profile-title">Edit Profile</h2>
 
       <form>
         <div class="form-group">
-          <label for="first-name">Username</label>
+          <label for="username">Username</label>
           <input
             type="text"
-            id="first-name"
+            id="username"
             class="form-control"
-            value="John"
+            value={user.username}
           />
         </div>
 
@@ -28,7 +28,7 @@ const EditProfile = () => {
             type="email"
             id="email"
             class="form-control"
-            value="john.doe@example.com"
+            value={user.email}
           />
         </div>
 
@@ -38,7 +38,7 @@ const EditProfile = () => {
             type="password"
             id="password"
             class="form-control"
-            placeholder="••••••••"
+            placeholder=""
           />
         </div>
 

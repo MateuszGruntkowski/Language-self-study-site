@@ -11,7 +11,6 @@ const Lessons = () => {
     const fetchLessons = async () => {
       try {
         const lessons = await getLessonsData();
-        console.log("Pobrane lekcje:", lessons);
         setLessons(lessons);
       } catch (err) {
         console.error("Błąd:", err);

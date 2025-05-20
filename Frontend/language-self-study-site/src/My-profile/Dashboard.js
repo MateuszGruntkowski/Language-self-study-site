@@ -1,30 +1,32 @@
 import React from "react";
 import "./styles/Dashboard.css";
 
-const Dashboard = () => {
+const Dashboard = ({ user }) => {
+  const userStatistics = user.userStatistics || {};
+  console.log("User statistics:", userStatistics);
   return (
     <div class="dashboard">
       <h2 class="dashboard-title">Dashboard</h2>
 
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-value">42</div>
+          <div class="stat-value">{userStatistics.totalHoursSpent}</div>
           <div class="stat-label">Hours Studied</div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-value">1248</div>
+          <div class="stat-value">{userStatistics.totalXp}</div>
           <div class="stat-label">XP Earned</div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-value">5</div>
+          <div class="stat-value">{userStatistics.completedLessonsCount}</div>
           <div class="stat-label">Lessons Completed</div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-value">38</div>
-          <div class="stat-label">Tasks Completed</div>
+          <div class="stat-value">{userStatistics.completedExercisesCount}</div>
+          <div class="stat-label">Exercises Completed</div>
         </div>
       </div>
 
@@ -32,7 +34,7 @@ const Dashboard = () => {
         <div class="streak-title">
           <span style={{ color: "#555555" }}>Daily Streak</span>
         </div>
-        <div class="streak-value">14 Days</div>
+        <div class="streak-value">{userStatistics.dailyStreak} Days</div>
       </div>
 
       <div class="rank-card">

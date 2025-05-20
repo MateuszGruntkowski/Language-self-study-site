@@ -7,7 +7,6 @@ export const getLessonsData = async () => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    console.log("Response from API:", response.data);
     return response.data;
   } catch (error) {
     console.error("Błąd podczas pobierania lekcji:", error);

@@ -7,10 +7,10 @@ import com.eb.language_self_study.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -28,9 +28,10 @@ public class UserController {
         return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
 
-    @GetMapping("/users/{user_id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long user_id) {
-        return new ResponseEntity<>(userService.getUserById(user_id), HttpStatus.OK);
+    @GetMapping("/userProfile")
+    public ResponseEntity<UserDto> getProfile(Authentication authentication) {
+        String username = authentication.getName();
+        return new ResponseEntity<>(userService.getUserByUsername(username), HttpStatus.OK);
     }
 
     @PostMapping("/register")

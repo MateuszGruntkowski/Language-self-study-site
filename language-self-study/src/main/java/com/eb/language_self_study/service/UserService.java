@@ -7,7 +7,6 @@ import com.eb.language_self_study.model.dto.UserDto;
 import com.eb.language_self_study.model.dto.UserLeaderboardEntryDto;
 import com.eb.language_self_study.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -66,9 +65,11 @@ public class UserService {
         return "User not authenticated";
     }
 
-    public UserDto getUserById(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    public UserDto getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new ResourceNotFoundException("User not found");
+        }
 
         return userMapper.mapToDto(user);
     }

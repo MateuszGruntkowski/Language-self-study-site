@@ -34,14 +34,14 @@ public class FlashcardSetController {
         return new ResponseEntity<>(flashcardSet, HttpStatus.OK);
     }
 
-    @PostMapping("/users/{userId}/flashcard-sets")
+    @PostMapping("/users/{username}/flashcard-sets")
     public ResponseEntity<FlashcardSetDto> createFlashcardSet(
-            @PathVariable Long userId,
+            @PathVariable String username,
             @RequestBody FlashcardSetDto flashcardSetDto){
         if (flashcardSetDto == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(flashcardSetService.createFlashcardSet(userId, flashcardSetDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(flashcardSetService.createFlashcardSet(username, flashcardSetDto), HttpStatus.CREATED);
 
     }
 

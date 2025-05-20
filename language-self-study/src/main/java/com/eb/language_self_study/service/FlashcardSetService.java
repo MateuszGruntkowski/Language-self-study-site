@@ -56,9 +56,9 @@ public class FlashcardSetService {
     }
 
 
-    public FlashcardSetDto createFlashcardSet(Long userId, FlashcardSetDto flashcardSetDto) {
+    public FlashcardSetDto createFlashcardSet(String username, FlashcardSetDto flashcardSetDto) {
 
-        UserDto userDto = userService.getUserById(userId);
+        UserDto userDto = userService.getUserByUsername(username);
         User user = userMapper.mapFromDto(userDto);
 
         FlashcardSet flashcardSet = mapper.mapToEntity(flashcardSetDto);
