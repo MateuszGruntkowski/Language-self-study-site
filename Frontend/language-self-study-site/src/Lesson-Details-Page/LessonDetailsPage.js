@@ -3,7 +3,7 @@ import LessonHeader from "./LessonHeader";
 import LessonProgress from "./LessonProgress";
 import ExercisesSection from "./ExercisesSection";
 import LessonNavigation from "./LessonNavigation";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getLessonData } from "./Lesson-Data";
 import "./styles/LessonDetailsPage.css";
 
@@ -25,10 +25,12 @@ const LessonDetailsPage = () => {
     fetchLesson();
   }, [lessonId]);
   if (!lesson) return <div>Loading...</div>;
-  // const location = useLocation();
-  // const lesson = location.state?.lesson;
-  // if (!lesson) return <div>Loading...</div>;
-  // console.log(lesson);
+
+  const icons = {
+    listenAndRepeat: "🎧",
+    sentenceArrangement: "📝",
+    quiz: "❓",
+  };
 
   const lessonData = {
     title: "Business English",
@@ -46,7 +48,7 @@ const LessonDetailsPage = () => {
         icon: "🎧",
         title: "Listen & Repeat",
         description:
-          "Improve your pronunciation by listening and repeating key business phrases and vocabulary.",
+          "Improve your pronunciation by listening and repeating key phrases and vocabulary.",
         xp: 50,
         link: "/listen-repeat-exercise",
       },
@@ -55,7 +57,7 @@ const LessonDetailsPage = () => {
         icon: "📝",
         title: "Sentence Ordering",
         description:
-          "Arrange jumbled sentences to form coherent business emails and conversations.",
+          "Układaj pomieszane zdania w logiczną i poprawną kolejność, aby tworzyć spójne wypowiedzi w języku angielskim",
         xp: 75,
         link: "/sentence-ordering-exercise",
       },
@@ -64,7 +66,7 @@ const LessonDetailsPage = () => {
         icon: "❓",
         title: "Business Vocabulary Quiz",
         description:
-          "Test your knowledge of business terminology and professional communication concepts.",
+          "Sprawdź swoją znajomość słownictwa i zasad komunikacji dzięki krótkim quizom.",
         xp: 100,
         link: "/quiz-exercise",
       },
@@ -86,7 +88,7 @@ const LessonDetailsPage = () => {
           percentage={lessonData.progress.percentage}
         />
 
-        <ExercisesSection exercises={lessonData.exercises} />
+        <ExercisesSection exercises={lesson.exercises} icons={icons} />
 
         <LessonNavigation />
       </div>

@@ -20,6 +20,7 @@ public class Exercise {
     private String type;
     private int xpReward;
     private int orderInLesson;
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "lesson_id", nullable=false)

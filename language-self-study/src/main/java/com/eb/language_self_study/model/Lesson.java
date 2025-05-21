@@ -22,7 +22,7 @@ public class Lesson {
     private String category;
     private String description;
     private String difficultyLevel;
-    private int xpReward;
+    private Integer xpReward;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -30,4 +30,23 @@ public class Lesson {
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserLessonProgress> userLessonProgresses;
+
+    public void updateXpReward() {
+        if(exercises == null || exercises.isEmpty()) {
+            this.xpReward = 0;
+            return;
+        }
+        int totalXp = 0;
+        for (Exercise exercise : exercises) {
+            totalXp += exercise.getXpReward();
+        }
+        this.xpReward = totalXp;
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void updateXpRewardBeforePersist() {
+        updateXpReward();
+        System.out.println("XP reward updated to: " + xpReward);
+    }
 }

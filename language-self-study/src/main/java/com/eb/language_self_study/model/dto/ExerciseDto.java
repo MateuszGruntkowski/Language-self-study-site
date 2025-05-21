@@ -14,4 +14,5 @@ public class ExerciseDto {
     private String type;
     private int xpReward;
     private int orderInLesson;
+    private String description;
 }
