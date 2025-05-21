@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import getListenAndRepeatExerciseData from "./data";
 import "./styles.css";
 
@@ -13,6 +13,9 @@ const ListenAndRepeatPage = () => {
   const [currentExercise, setCurrentExercise] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [totalExercises, setTotalExercises] = useState(5); // Każda lekcja ma dokładnie 5 zadań
+
+  // navigate
+  const navigate = useNavigate();
 
   // Obliczamy bazowy ID dla lekcji - pierwszy ID w serii 5 zadań dla danej lekcji
   const calculateBaseExerciseId = (exerciseId) => {
@@ -82,24 +85,9 @@ const ListenAndRepeatPage = () => {
 
   // Function to go to the next exercise type
   const goToNextExerciseType = () => {
-    // W rzeczywistej implementacji tutaj byłoby przekierowanie do nowego typu ćwiczenia
-    alert("Przejście do następnego typu ćwiczenia");
+    const linkToNextExercise = `/sentence-arrangement/${currentExerciseId + 1}`;
+    navigate(linkToNextExercise);
   };
-
-  // Reference for next exercise button
-  const nextExerciseRef = useRef(null);
-
-  // Show/hide next exercise button based on current position
-  useEffect(() => {
-    if (nextExerciseRef.current) {
-      // Pokazujemy przycisk "Next exercise" tylko gdy jesteśmy na ostatnim zadaniu w lekcji
-      if (currentExerciseId === baseExerciseId + totalExercises - 1) {
-        nextExerciseRef.current.style.display = "flex";
-      } else {
-        nextExerciseRef.current.style.display = "none";
-      }
-    }
-  }, [currentExerciseId, baseExerciseId, totalExercises]);
 
   if (isLoading && !currentExercise) {
     return <div className="lr-loading">Loading...</div>;
@@ -139,7 +127,7 @@ const ListenAndRepeatPage = () => {
               {currentExercise.translation}
             </div>
 
-            <div className="lr-image-container">
+            {/* <div className="lr-image-container">
               {currentExercise.imageUrl ? (
                 <img
                   src={currentExercise.imageUrl}
@@ -151,7 +139,7 @@ const ListenAndRepeatPage = () => {
                   alt={`${currentExercise.textToRepeat} image`}
                 />
               )}
-            </div>
+            </div> */}
           </>
         )}
 
@@ -184,14 +172,16 @@ const ListenAndRepeatPage = () => {
           </button>
         </div>
 
-        <div className="lr-next-exercise-container" ref={nextExerciseRef}>
-          <button
-            onClick={goToNextExerciseType}
-            className="lr-next-exercise-button"
-          >
-            Next exercise
-          </button>
-        </div>
+        {currentExerciseId === baseExerciseId + totalExercises - 1 && (
+          <div className="lr-next-exercise-container">
+            <button
+              onClick={goToNextExerciseType}
+              className="lr-next-exercise-button"
+            >
+              Next exercise
+            </button>
+          </div>
+        )}
 
         {isLoading && <div className="lr-loading-overlay">Loading...</div>}
       </div>

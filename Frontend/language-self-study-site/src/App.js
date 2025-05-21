@@ -30,7 +30,7 @@ const App = () => {
           element={<ListenAndRepeatPage />}
         />
         <Route
-          path="/:lessonCategory/sentence-arrangement/:exerciseId"
+          path="/sentence-arrangement/:exerciseId"
           element={<SentenceBuilder />}
         />
         <Route

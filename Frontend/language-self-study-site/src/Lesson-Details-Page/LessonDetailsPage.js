@@ -69,7 +69,7 @@ const LessonDetailsPage = () => {
         "Arrange the words to form a correct sentence. Pay attention to grammar and word order.",
       xpReward: sentenceArrangementXpReward,
       icon: "📝",
-      link: `/${lesson.category}/sentence-arrangement/${lesson.exercises[5].exerciseId}`,
+      link: `/sentence-arrangement/${lesson.exercises[5].exerciseId}`,
     },
 
     {

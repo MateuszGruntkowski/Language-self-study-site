@@ -48,8 +48,9 @@ public class ListenAndRepeatService {
                     JSONObject jsonObj = jsonArray.getJSONObject(0);
                     JSONArray phoneticsArray = jsonObj.getJSONArray("phonetics");
 
-                    if (!phoneticsArray.isEmpty()) {
-                        String audioUrl = phoneticsArray.getJSONObject(0).optString("audio", "");
+                    for (int i = 0; i < phoneticsArray.length(); i++) {
+                        JSONObject phonetic = phoneticsArray.getJSONObject(i);
+                        String audioUrl = phonetic.optString("audio", "");
                         if (!audioUrl.isEmpty()) {
                             return audioUrl;
                         }

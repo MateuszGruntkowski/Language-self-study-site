@@ -1,88 +1,56 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import getTranslationQuizData from "./data";
 import "./styles/Quiz.css";
 
+const QUIZ_LENGTH = 5; // Liczba pytań w lekcji
+
 const LanguageQuiz = () => {
-  const params = useParams();
-  const exerciseId = parseInt(params.exerciseId, 10);
+  const navigate = useNavigate();
 
-  const [exercise, setExercise] = useState(null);
-
-  useEffect(() => {
-    const fetchExercise = async () => {
-      try {
-        const exerciseData = await getTranslationQuizData(exerciseId);
-        console.log("Fetched exercise data:", exerciseData);
-        setExercise(exerciseData);
-      } catch (error) {
-        console.error("Error fetching lesson data:", error);
-      }
-    };
-    fetchExercise();
-  }, [exerciseId]);
+  const { exerciseId } = useParams();
+  const startingId = parseInt(exerciseId, 10);
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentExercise, setCurrentExercise] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [score, setScore] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
 
-  const quizQuestions = [
-    {
-      question: "Co oznacza słowo 'apple'?",
-      options: ["jabłko", "banan", "pomarańcza", "gruszka"],
-      correctAnswer: "jabłko",
-      image: "/api/placeholder/250/250", // Placeholder dla obrazka
-    },
-    {
-      question: "Jak przetłumaczysz 'house'?",
-      options: ["samochód", "dom", "drzewo", "okno"],
-      correctAnswer: "dom",
-      image: "/api/placeholder/250/250",
-    },
-    {
-      question: "Co to jest 'dog'?",
-      options: ["kot", "ryba", "pies", "ptak"],
-      correctAnswer: "pies",
-      image: "/api/placeholder/250/250",
-    },
-    {
-      question: "Jak po angielsku powiemy 'książka'?",
-      options: ["book", "page", "story", "letter"],
-      correctAnswer: "book",
-      image: "/api/placeholder/250/250",
-    },
-    {
-      question: "Co oznacza 'water'?",
-      options: ["woda", "ogień", "ziemia", "powietrze"],
-      correctAnswer: "woda",
-      image: "/api/placeholder/250/250",
-    },
-  ];
+  // Fetchuj quiz dla aktualnego pytania
+  useEffect(() => {
+    const fetchExercise = async () => {
+      const currentId = startingId + currentQuestionIndex;
+      try {
+        const data = await getTranslationQuizData(currentId);
+        setCurrentExercise(data);
+      } catch (error) {
+        console.error("Błąd przy pobieraniu quizu", error);
+      }
+    };
 
-  const currentQuestion = quizQuestions[currentQuestionIndex];
+    if (currentQuestionIndex < QUIZ_LENGTH) {
+      fetchExercise();
+    } else {
+      setQuizCompleted(true);
+    }
+  }, [currentQuestionIndex, startingId]);
 
   const handleAnswerClick = (answer) => {
     if (showFeedback) return;
-
     setSelectedAnswer(answer);
     setShowFeedback(true);
 
-    if (answer === currentQuestion.correctAnswer) {
-      setScore(score + 1);
+    if (answer === currentExercise.translation) {
+      setScore((prev) => prev + 1);
     }
   };
 
   const handleNextQuestion = () => {
     setSelectedAnswer(null);
     setShowFeedback(false);
-
-    if (currentQuestionIndex < quizQuestions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      setQuizCompleted(true);
-    }
+    setCurrentQuestionIndex((prev) => prev + 1);
   };
 
   const restartQuiz = () => {
@@ -93,41 +61,35 @@ const LanguageQuiz = () => {
     setShowFeedback(false);
   };
 
+  const goToMainPage = () => {
+    navigate("/learn");
+  };
+
   const getAnswerClass = (option) => {
     if (!showFeedback) return "";
-
-    if (option === currentQuestion.correctAnswer) {
-      return "quiz-answer-correct";
-    }
-
-    if (option === selectedAnswer && option !== currentQuestion.correctAnswer) {
+    if (option === currentExercise.translation) return "quiz-answer-correct";
+    if (option === selectedAnswer && option !== currentExercise.translation)
       return "quiz-answer-incorrect";
-    }
-
     return "";
   };
+
+  if (!currentExercise && !quizCompleted) return <p>Ładowanie...</p>;
 
   if (quizCompleted) {
     return (
       <div className="quiz-container">
         <div className="quiz-card">
-          <div className="quiz-header">
-            <h1 className="quiz-title">Quiz zakończony!</h1>
-            <p className="quiz-score">
-              Twój wynik: {score} / {quizQuestions.length}
-            </p>
-          </div>
-          <div className="quiz-result-message">
-            {score === quizQuestions.length ? (
-              <p>Świetnie! Uzyskałeś maksymalną liczbę punktów!</p>
-            ) : score >= quizQuestions.length / 2 ? (
-              <p>Dobry wynik! Próbuj dalej, aby się doskonalić.</p>
-            ) : (
-              <p>Warto jeszcze poćwiczyć. Nie poddawaj się!</p>
-            )}
-          </div>
+          <h1 className="quiz-title">Quiz zakończony!</h1>
+          <p className="quiz-score">
+            Twój wynik: {score} / {QUIZ_LENGTH}
+          </p>
           <button className="quiz-restart-button" onClick={restartQuiz}>
             Rozpocznij ponownie
+          </button>
+        </div>
+        <div className="main-page-div">
+          <button className="quiz-main-page-button" onClick={goToMainPage}>
+            Powrót do strony głównej
           </button>
         </div>
       </div>
@@ -140,20 +102,16 @@ const LanguageQuiz = () => {
         <div className="quiz-header">
           <h1 className="quiz-title">Quiz językowy</h1>
           <p className="quiz-progress">
-            Pytanie {currentQuestionIndex + 1} z {quizQuestions.length}
+            Pytanie {currentQuestionIndex + 1} z {QUIZ_LENGTH}
           </p>
         </div>
 
         <div className="quiz-question">
-          <h2>{currentQuestion.question}</h2>
-        </div>
-
-        <div className="quiz-image-container">
-          <img src={currentQuestion.image} alt="Obrazek do pytania" />
+          <h2>{currentExercise.question}</h2>
         </div>
 
         <div className="quiz-answers">
-          {currentQuestion.options.map((option, index) => (
+          {currentExercise.options.map((option, index) => (
             <button
               key={index}
               className={`quiz-answer-button ${getAnswerClass(option)}`}
@@ -167,16 +125,15 @@ const LanguageQuiz = () => {
 
         {showFeedback && (
           <div className="quiz-feedback">
-            {selectedAnswer === currentQuestion.correctAnswer ? (
+            {selectedAnswer === currentExercise.translation ? (
               <p className="quiz-feedback-correct">Poprawna odpowiedź!</p>
             ) : (
               <p className="quiz-feedback-incorrect">
-                Niestety nie. Poprawna odpowiedź to:{" "}
-                {currentQuestion.correctAnswer}
+                Niepoprawnie. Poprawna odpowiedź: {currentExercise.translation}
               </p>
             )}
             <button className="quiz-next-button" onClick={handleNextQuestion}>
-              {currentQuestionIndex < quizQuestions.length - 1
+              {currentQuestionIndex + 1 < QUIZ_LENGTH
                 ? "Następne pytanie"
                 : "Zobacz wyniki"}
             </button>
@@ -184,7 +141,7 @@ const LanguageQuiz = () => {
         )}
 
         <div className="quiz-score-display">
-          Wynik: {score} / {quizQuestions.length}
+          Wynik: {score} / {QUIZ_LENGTH}
         </div>
       </div>
     </div>
