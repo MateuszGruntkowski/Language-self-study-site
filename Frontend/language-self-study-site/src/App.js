@@ -21,13 +21,16 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/learn" element={<LearningPage />} />
         <Route path="/my-profile" element={<MyProfile />} />
-        <Route path="/Lesson-Details/id" element={<LessonDetailsPage />} />
         <Route
-          path="/Listen-and-Repeat/id"
+          path="/lesson-details/:lessonId"
+          element={<LessonDetailsPage />}
+        />
+        <Route
+          path="/listen-and-repeat/id"
           element={<ListenRepeatAndRepeatPage />}
         />
-        <Route path="/Sentence-Building/id" element={<SentenceBuilder />} />
-        <Route path="/Quiz/id" element={<Quiz />} />
+        <Route path="/sentence-building/id" element={<SentenceBuilder />} />
+        <Route path="/quiz/id" element={<Quiz />} />
       </Routes>
     </Router>
   );

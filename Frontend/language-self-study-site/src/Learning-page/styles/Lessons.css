@@ -1,108 +1,108 @@
 .learning-page .lessons-section {
-    padding: 40px 0;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    margin-bottom: 40px;
+  padding: 40px 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  margin-bottom: 40px;
 }
 
 .learning-page .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 0 20px;
 }
 
 .learning-page .section-title {
-    font-size: 24px;
-    color: #2c3e50;
-    position: relative;
-    padding-bottom: 10px;
+  font-size: 24px;
+  color: #2c3e50;
+  position: relative;
+  padding-bottom: 10px;
 }
 
 .learning-page .section-title:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 14.5%;
-    width: 60px;
-    height: 3px;
-    background-color: #3498db;
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 14.5%;
+  width: 60px;
+  height: 3px;
+  background-color: #3498db;
 }
 
 .learning-page .lessons-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 25px;
-    padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  padding: 0 20px;
 }
 
 .learning-page .lesson-card {
-    background-color: #f5f7fa;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
+  background-color: #f5f7fa;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
 }
 
 .learning-page .lesson-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .learning-page .lesson-image {
-    height: 180px;
-    background-size: cover;
-    background-position: center;
-    position: relative;
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
 }
 
 .learning-page .lesson-content {
-    padding: 20px;
+  padding: 20px;
 }
 
 .learning-page .lesson-title {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #2c3e50;
-    font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #2c3e50;
+  font-weight: 600;
 }
 
 .learning-page .lesson-description {
-    color: #555;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 15px;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 15px;
 }
 
 .learning-page .lesson-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #777;
-    font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #777;
+  font-size: 14px;
 }
 
 .learning-page .lesson-level {
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
-.learning-page .level-podstawowy{
-    background-color: #e1f5fe;
-    color: #0288d1;
+.learning-page .level-podstawowy {
+  background-color: #e1f5fe;
+  color: #0288d1;
 }
 
 .learning-page .level-średniozaawansowany {
-    background-color: #e8f5e9;
-    color: #388e3c;
+  background-color: #e8f5e9;
+  color: #388e3c;
 }
 
 .learning-page .level-zaawansowany {
-    background-color: #fff3e0;
-    color: #f57c00;
+  background-color: #fff3e0;
+  color: #f57c00;
 }

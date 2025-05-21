@@ -1,11 +1,35 @@
-import React from "react";
+import React, { useState, useEffect, use } from "react";
 import LessonHeader from "./LessonHeader";
 import LessonProgress from "./LessonProgress";
 import ExercisesSection from "./ExercisesSection";
 import LessonNavigation from "./LessonNavigation";
+import { useLocation, useParams } from "react-router-dom";
+import { getLessonData } from "./Lesson-Data";
 import "./styles/LessonDetailsPage.css";
 
 const LessonDetailsPage = () => {
+  let params = useParams();
+  const lessonId = params.lessonId;
+
+  const [lesson, setLesson] = useState(null);
+  useEffect(() => {
+    const fetchLesson = async () => {
+      try {
+        const lessonData = await getLessonData(lessonId);
+        console.log("Fetched lesson data:", lessonData);
+        setLesson(lessonData);
+      } catch (error) {
+        console.error("Error fetching lesson data:", error);
+      }
+    };
+    fetchLesson();
+  }, [lessonId]);
+  if (!lesson) return <div>Loading...</div>;
+  // const location = useLocation();
+  // const lesson = location.state?.lesson;
+  // if (!lesson) return <div>Loading...</div>;
+  // console.log(lesson);
+
   const lessonData = {
     title: "Business English",
     level: "Intermediate",
@@ -51,9 +75,9 @@ const LessonDetailsPage = () => {
     <div className="lesson-detail-page">
       <div className="lesson-detail-container">
         <LessonHeader
-          title={lessonData.title}
-          level={lessonData.level}
-          description={lessonData.description}
+          category={lesson.category}
+          difficultyLevel={lesson.difficultyLevel}
+          description={lesson.description}
         />
 
         <LessonProgress
