@@ -2,36 +2,33 @@ import React from "react";
 import ExerciseCard from "./ExerciseCard";
 import "./styles/ExercisesSection.css";
 
-const ExercisesSection = ({ exercises, icons }) => {
-  const getIcon = (type) => {
-    switch (type) {
-      case "listen_and_repeat":
-        return icons.listenAndRepeat;
-      case "sentence_arrangement":
-        return icons.sentenceArrangement;
-      case "translation_quiz":
-        return icons.quiz;
-      default:
-        return null;
-    }
-  };
+const ExercisesSection = ({ exercises }) => {
+  console.log("Exercises Categories:", exercises);
+  // const getIcon = (type) => {
+  //   switch (type) {
+  //     case "LISTEN_AND_REPEAT":
+  //       return icons.listenAndRepeat;
+  //     case "SENTENCE_ARRANGEMENT":
+  //       return icons.sentenceArrangement;
+  //     case "TRANSLATION_QUIZ":
+  //       return icons.quiz;
+  //     default:
+  //       return null;
+  //   }
+  // };
 
   return (
     <div className="lesson-detail-content">
       <h2 className="lesson-exercises-title">Exercises</h2>
       <div className="lesson-exercises-grid">
-        {exercises.map((exercise) => (
+        {exercises.map((exercise, index) => (
           <ExerciseCard
-            key={exercise.exerciseId}
-            id={exercise.exerciseId}
-            icon={getIcon(exercise.type)}
-            type={
-              exercise.type.charAt(0).toUpperCase() +
-              exercise.type.slice(1).replaceAll("_", " ")
-            }
+            key={index}
+            icon={exercise.icon}
+            type={exercise.type}
             description={exercise.description}
             xp={exercise.xpReward}
-            // link={exercise.link}
+            link={exercise.link}
           />
         ))}
       </div>

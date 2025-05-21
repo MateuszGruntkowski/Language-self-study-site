@@ -1,5 +1,7 @@
 // SentenceBuilder.jsx - Main component
 import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import getSentenceArrangementExerciseData from "./data";
 import WordsContainer from "./WordsContainer";
 import SentenceArea from "./SentenceArea";
 import Controls from "./Controls";
@@ -28,6 +30,26 @@ const sentences = [
 ];
 
 const SentenceBuilder = () => {
+  const params = useParams();
+  const exerciseId = parseInt(params.exerciseId, 10);
+
+  const [exercise, setExercise] = useState(null);
+
+  useEffect(() => {
+    const fetchExercise = async () => {
+      try {
+        const exerciseData = await getSentenceArrangementExerciseData(
+          exerciseId
+        );
+        console.log("Fetched exercise data:", exerciseData);
+        setExercise(exerciseData);
+      } catch (error) {
+        console.error("Error fetching lesson data:", error);
+      }
+    };
+    fetchExercise();
+  }, [exerciseId]);
+
   const [currentSentence, setCurrentSentence] = useState(0);
   const [availableWords, setAvailableWords] = useState([]);
   const [sentenceWords, setSentenceWords] = useState([]);

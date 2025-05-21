@@ -1,0 +1,21 @@
+import axios from "axios";
+
+const getTranslationQuizData = async (exerciseID) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/translation-quiz/${exerciseID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    console.log(response.data, "Translation Quiz exercise data");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching Translation Quiz exercise data:", error);
+    throw error;
+  }
+};
+
+export default getTranslationQuizData;

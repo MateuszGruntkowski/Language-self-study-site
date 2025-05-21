@@ -1,7 +1,27 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import getTranslationQuizData from "./data";
 import "./styles/Quiz.css";
 
 const LanguageQuiz = () => {
+  const params = useParams();
+  const exerciseId = parseInt(params.exerciseId, 10);
+
+  const [exercise, setExercise] = useState(null);
+
+  useEffect(() => {
+    const fetchExercise = async () => {
+      try {
+        const exerciseData = await getTranslationQuizData(exerciseId);
+        console.log("Fetched exercise data:", exerciseData);
+        setExercise(exerciseData);
+      } catch (error) {
+        console.error("Error fetching lesson data:", error);
+      }
+    };
+    fetchExercise();
+  }, [exerciseId]);
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [score, setScore] = useState(0);

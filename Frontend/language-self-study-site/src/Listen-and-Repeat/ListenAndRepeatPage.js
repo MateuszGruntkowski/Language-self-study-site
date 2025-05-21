@@ -1,59 +1,109 @@
-import { useState } from "react";
-import { useEffect, useRef } from "react";
-import "./styles.css"; // Załączenie zewnętrznego pliku CSS
+import { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import getListenAndRepeatExerciseData from "./data";
+import "./styles.css";
 
-const ListenRepeatAndRepeatPage = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+const ListenAndRepeatPage = () => {
+  // Initial exerciseId from URL params
+  const params = useParams();
+  const initialExerciseId = parseInt(params.exerciseId, 10);
 
-  // Przykładowe dane
-  const words = [
-    { english: "Apple", polish: "Jabłko", audioSrc: "/audio/apple.mp3" },
-    { english: "House", polish: "Dom", audioSrc: "/audio/house.mp3" },
-    { english: "Car", polish: "Samochód", audioSrc: "/audio/car.mp3" },
-    { english: "Book", polish: "Książka", audioSrc: "/audio/book.mp3" },
-  ];
+  // State variables
+  const [currentExerciseId, setCurrentExerciseId] = useState(initialExerciseId);
+  const [currentExercise, setCurrentExercise] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [totalExercises, setTotalExercises] = useState(5); // Każda lekcja ma dokładnie 5 zadań
 
-  const totalWords = words.length;
-  const currentWord = words[currentIndex];
-
-  // Funkcja do odtwarzania dźwięku
-  const playAudio = () => {
-    // W rzeczywistej implementacji tutaj byłoby odtwarzanie audio
-    alert(`Odtwarzanie dźwięku: "${currentWord.english}"`);
+  // Obliczamy bazowy ID dla lekcji - pierwszy ID w serii 5 zadań dla danej lekcji
+  const calculateBaseExerciseId = (exerciseId) => {
+    return exerciseId - ((exerciseId - 1) % 5);
   };
 
-  // Funkcje nawigacji
+  // Bazowy ID dla bieżącej lekcji
+  const [baseExerciseId, setBaseExerciseId] = useState(
+    calculateBaseExerciseId(initialExerciseId)
+  );
+
+  // Fetch exercise data when exerciseId changes
+  useEffect(() => {
+    const fetchExercise = async () => {
+      try {
+        setIsLoading(true);
+        const exerciseData = await getListenAndRepeatExerciseData(
+          currentExerciseId
+        );
+        console.log("Fetched exercise data:", exerciseData);
+        setCurrentExercise(exerciseData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching exercise data:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchExercise();
+  }, [currentExerciseId]);
+
+  // Obliczenie pozycji w lekcji (1-5) na podstawie globalnego ID ćwiczenia
+  const getPositionInLesson = (exerciseId) => {
+    return ((exerciseId - 1) % 5) + 1;
+  };
+
+  // Function to play audio
+  const playAudio = () => {
+    if (currentExercise && currentExercise.audioUrl) {
+      const audio = new Audio(currentExercise.audioUrl);
+      audio.play().catch((error) => {
+        console.error("Failed to play audio:", error);
+        alert(`Could not play audio for "${currentExercise.textToRepeat}"`);
+      });
+    }
+  };
+
+  // Navigation functions
   const goToPrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+    // Sprawdzanie czy jesteśmy na pierwszym zadaniu w lekcji
+    if (currentExerciseId > baseExerciseId) {
+      setCurrentExerciseId(currentExerciseId - 1);
     }
   };
 
   const goToNext = () => {
-    if (currentIndex < totalWords - 1) {
-      setCurrentIndex(currentIndex + 1);
+    // Sprawdzanie czy jesteśmy na ostatnim zadaniu w lekcji
+    if (currentExerciseId < baseExerciseId + totalExercises - 1) {
+      setCurrentExerciseId(currentExerciseId + 1);
     }
   };
 
-  // Funkcja do przejścia do następnego ćwiczenia
-  const goToNextExercise = () => {
-    // W rzeczywistej implementacji tutaj byłoby przekierowanie do następnego ćwiczenia
-    alert("Przejście do następnego ćwiczenia");
-  };
-
-  // Funkcja do wyświetlania przycisku "Następne ćwiczenie"
-  const nextExerciseRef = useRef(null);
-  const showNextExerciseButton = () => {
-    if (currentIndex === totalWords - 1) {
-      nextExerciseRef.current.style.display = "flex";
-    } else {
-      nextExerciseRef.current.style.display = "none";
-    }
-  };
-
+  // Przy każdej zmianie exerciseId, aktualizuj baseExerciseId
   useEffect(() => {
-    showNextExerciseButton();
-  }, [currentIndex]);
+    setBaseExerciseId(calculateBaseExerciseId(currentExerciseId));
+  }, [currentExerciseId]);
+
+  // Function to go to the next exercise type
+  const goToNextExerciseType = () => {
+    // W rzeczywistej implementacji tutaj byłoby przekierowanie do nowego typu ćwiczenia
+    alert("Przejście do następnego typu ćwiczenia");
+  };
+
+  // Reference for next exercise button
+  const nextExerciseRef = useRef(null);
+
+  // Show/hide next exercise button based on current position
+  useEffect(() => {
+    if (nextExerciseRef.current) {
+      // Pokazujemy przycisk "Next exercise" tylko gdy jesteśmy na ostatnim zadaniu w lekcji
+      if (currentExerciseId === baseExerciseId + totalExercises - 1) {
+        nextExerciseRef.current.style.display = "flex";
+      } else {
+        nextExerciseRef.current.style.display = "none";
+      }
+    }
+  }, [currentExerciseId, baseExerciseId, totalExercises]);
+
+  if (isLoading && !currentExercise) {
+    return <div className="lr-loading">Loading...</div>;
+  }
 
   return (
     <div className="lr-container">
@@ -61,50 +111,73 @@ const ListenRepeatAndRepeatPage = () => {
         <div className="lr-header">
           <h1 className="lr-title">Listen & Repeat</h1>
           <div className="lr-progress">
-            {currentIndex + 1}/{totalWords}
+            {getPositionInLesson(currentExerciseId)}/{totalExercises}
           </div>
         </div>
 
-        <div className="lr-player">
-          <button onClick={playAudio} className="lr-play-button">
-            <svg
-              width="30"
-              height="30"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-            </svg>
-          </button>
-        </div>
+        {currentExercise && (
+          <>
+            <div className="lr-player">
+              <button onClick={playAudio} className="lr-play-button">
+                <svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+              </button>
+            </div>
 
-        <div className="lr-english-word">{currentWord.english}</div>
-        <div className="lr-polish-translation">{currentWord.polish}</div>
+            <div className="lr-english-word">
+              {currentExercise.textToRepeat}
+            </div>
+            <div className="lr-polish-translation">
+              {currentExercise.translation}
+            </div>
 
-        <div className="lr-image-container">
-          <img
-            src="/api/placeholder/250/250"
-            alt={`${currentWord.english} image`}
-          />
-        </div>
+            <div className="lr-image-container">
+              {currentExercise.imageUrl ? (
+                <img
+                  src={currentExercise.imageUrl}
+                  alt={`${currentExercise.textToRepeat} image`}
+                />
+              ) : (
+                <img
+                  src="/api/placeholder/250/250"
+                  alt={`${currentExercise.textToRepeat} image`}
+                />
+              )}
+            </div>
+          </>
+        )}
 
         <div className="lr-navigation">
           <button
             onClick={goToPrevious}
-            disabled={currentIndex === 0}
+            disabled={currentExerciseId === baseExerciseId || isLoading}
             className={`lr-nav-button ${
-              currentIndex === 0 ? "lr-button-disabled" : ""
+              currentExerciseId === baseExerciseId || isLoading
+                ? "lr-button-disabled"
+                : ""
             }`}
           >
             Previous
           </button>
           <button
             onClick={goToNext}
-            disabled={currentIndex === totalWords - 1}
+            disabled={
+              currentExerciseId === baseExerciseId + totalExercises - 1 ||
+              isLoading
+            }
             className={`lr-nav-button ${
-              currentIndex === totalWords - 1 ? "lr-button-disabled" : ""
+              currentExerciseId === baseExerciseId + totalExercises - 1 ||
+              isLoading
+                ? "lr-button-disabled"
+                : ""
             }`}
           >
             Next
@@ -113,15 +186,17 @@ const ListenRepeatAndRepeatPage = () => {
 
         <div className="lr-next-exercise-container" ref={nextExerciseRef}>
           <button
-            onClick={goToNextExercise}
+            onClick={goToNextExerciseType}
             className="lr-next-exercise-button"
           >
             Next exercise
           </button>
         </div>
+
+        {isLoading && <div className="lr-loading-overlay">Loading...</div>}
       </div>
     </div>
   );
 };
 
-export default ListenRepeatAndRepeatPage;
+export default ListenAndRepeatPage;

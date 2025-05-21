@@ -11,6 +11,7 @@ const LessonDetailsPage = () => {
   let params = useParams();
   const lessonId = params.lessonId;
 
+  // fetching lesson data
   const [lesson, setLesson] = useState(null);
   useEffect(() => {
     const fetchLesson = async () => {
@@ -26,52 +27,60 @@ const LessonDetailsPage = () => {
   }, [lessonId]);
   if (!lesson) return <div>Loading...</div>;
 
-  const icons = {
-    listenAndRepeat: "🎧",
-    sentenceArrangement: "📝",
-    quiz: "❓",
-  };
+  // asigning icons to exercises
+  // const icons = {
+  //   listenAndRepeat: "🎧",
+  //   sentenceArrangement: "📝",
+  //   quiz: "❓",
+  // };
 
-  const lessonData = {
-    title: "Business English",
-    level: "Intermediate",
-    description:
-      "Master essential business vocabulary and communication skills for professional environments. This lesson covers common business phrases, negotiation techniques, and formal email writing.",
-    progress: {
-      completed: 1,
-      total: 3,
-      percentage: 33,
+  // calculating XP rewards for each exercise type
+  let listenAndRepeatXpReward = 0;
+  let sentenceArrangementXpReward = 0;
+  let quizXpReward = 0;
+
+  lesson.exercises.map((exercise) => {
+    switch (exercise.type) {
+      case "LISTEN_AND_REPEAT":
+        listenAndRepeatXpReward += exercise.xpReward;
+        break;
+      case "SENTENCE_ARRANGEMENT":
+        sentenceArrangementXpReward += exercise.xpReward;
+        break;
+      case "TRANSLATION_QUIZ":
+        quizXpReward += exercise.xpReward;
+        break;
+    }
+  });
+
+  const exerciseCategories = [
+    {
+      type: "LISTEN_AND_REPEAT",
+      description:
+        "Listen to the audio and repeat the sentences. Focus on pronunciation and intonation.",
+      xpReward: listenAndRepeatXpReward,
+      icon: "🎧",
+      link: `/${lesson.category}/listen-and-repeat/${lesson.exercises[0].exerciseId}`,
     },
-    exercises: [
-      {
-        id: "listenAndRepeat",
-        icon: "🎧",
-        title: "Listen & Repeat",
-        description:
-          "Improve your pronunciation by listening and repeating key phrases and vocabulary.",
-        xp: 50,
-        link: "/listen-repeat-exercise",
-      },
-      {
-        id: "sentenceOrdering",
-        icon: "📝",
-        title: "Sentence Ordering",
-        description:
-          "Układaj pomieszane zdania w logiczną i poprawną kolejność, aby tworzyć spójne wypowiedzi w języku angielskim",
-        xp: 75,
-        link: "/sentence-ordering-exercise",
-      },
-      {
-        id: "quiz",
-        icon: "❓",
-        title: "Business Vocabulary Quiz",
-        description:
-          "Sprawdź swoją znajomość słownictwa i zasad komunikacji dzięki krótkim quizom.",
-        xp: 100,
-        link: "/quiz-exercise",
-      },
-    ],
-  };
+
+    {
+      type: "SENTENCE_ARRANGEMENT",
+      description:
+        "Arrange the words to form a correct sentence. Pay attention to grammar and word order.",
+      xpReward: sentenceArrangementXpReward,
+      icon: "📝",
+      link: `/${lesson.category}/sentence-arrangement/${lesson.exercises[5].exerciseId}`,
+    },
+
+    {
+      type: "TRANSLATION_QUIZ",
+      description:
+        "Translate the sentences from your native language to English. Focus on vocabulary and grammar.",
+      xpReward: quizXpReward,
+      icon: "❓",
+      link: `/${lesson.category}/translation-quiz/${lesson.exercises[10].exerciseId}`,
+    },
+  ];
 
   return (
     <div className="lesson-detail-page">
@@ -82,13 +91,13 @@ const LessonDetailsPage = () => {
           description={lesson.description}
         />
 
-        <LessonProgress
+        {/* <LessonProgress
           completed={lessonData.progress.completed}
           total={lessonData.progress.total}
           percentage={lessonData.progress.percentage}
-        />
+        /> */}
 
-        <ExercisesSection exercises={lesson.exercises} icons={icons} />
+        <ExercisesSection exercises={exerciseCategories} />
 
         <LessonNavigation />
       </div>

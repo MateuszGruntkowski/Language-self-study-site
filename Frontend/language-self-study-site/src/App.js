@@ -6,7 +6,7 @@ import Login from "./Auth/Login.js";
 import LearningPage from "./Learning-page/LearningPage.js";
 import MyProfile from "./My-profile/MyProfile.js";
 import LessonDetailsPage from "./Lesson-Details-Page/LessonDetailsPage.js";
-import ListenRepeatAndRepeatPage from "./Listen-and-Repeat/ListenAndRepeatPage.js";
+import ListenAndRepeatPage from "./Listen-and-Repeat/ListenAndRepeatPage.js";
 import SentenceBuilder from "./Sentence-Building/SentenceBuilder.js";
 import Quiz from "./Quiz/Quiz.js";
 
@@ -26,11 +26,17 @@ const App = () => {
           element={<LessonDetailsPage />}
         />
         <Route
-          path="/listen-and-repeat/id"
-          element={<ListenRepeatAndRepeatPage />}
+          path="/:lessonCategory/listen-and-repeat/:exerciseId"
+          element={<ListenAndRepeatPage />}
         />
-        <Route path="/sentence-building/id" element={<SentenceBuilder />} />
-        <Route path="/quiz/id" element={<Quiz />} />
+        <Route
+          path="/:lessonCategory/sentence-arrangement/:exerciseId"
+          element={<SentenceBuilder />}
+        />
+        <Route
+          path="/:lessonCategory/translation-quiz/:exerciseId"
+          element={<Quiz />}
+        />
       </Routes>
     </Router>
   );
