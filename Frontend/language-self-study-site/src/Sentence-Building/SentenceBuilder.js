@@ -10,45 +10,15 @@ import Navigation from "./Navigation";
 import NextExercise from "./NextExercise";
 import "./styles/SentenceBuilder.css";
 
-// Przykładowe dane ćwiczeń
-const sentences = [
-  {
-    id: 1,
-    words: ["yesterday", "went", "to", "the", "I", "cinema"],
-    correctSentence: "I went to the cinema yesterday",
-  },
-  {
-    id: 2,
-    words: ["English", "speaks", "fluently", "she", "very"],
-    correctSentence: "she speaks English very fluently",
-  },
-  {
-    id: 3,
-    words: ["tomorrow", "will", "to", "beach", "go", "we", "the"],
-    correctSentence: "we will go to the beach tomorrow",
-  },
-];
-
 const SentenceBuilder = () => {
   const params = useParams();
-  const exerciseId = parseInt(params.exerciseId, 10);
+  const lessonId = parseInt(params.lessonId, 10);
 
-  const [exercise, setExercise] = useState(null);
-
-  useEffect(() => {
-    const fetchExercise = async () => {
-      try {
-        const exerciseData = await getSentenceArrangementExerciseData(
-          exerciseId
-        );
-        console.log("Fetched exercise data:", exerciseData);
-        setExercise(exerciseData);
-      } catch (error) {
-        console.error("Error fetching lesson data:", error);
-      }
-    };
-    fetchExercise();
-  }, [exerciseId]);
+  const [exercises, setExercises] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [totalXP, setTotalXP] = useState(0);
+  const [earnedXP, setEarnedXP] = useState(0);
 
   const [currentSentence, setCurrentSentence] = useState(0);
   const [availableWords, setAvailableWords] = useState([]);
@@ -62,25 +32,57 @@ const SentenceBuilder = () => {
   const draggedItem = useRef(null);
   const draggedSource = useRef(null);
 
-  // Załadowanie ćwiczenia przy montowaniu komponentu
+  // Fetch exercise data from API
   useEffect(() => {
-    loadSentence(currentSentence);
-  }, []);
+    const fetchExercises = async () => {
+      try {
+        setLoading(true);
+        const exerciseData = await getSentenceArrangementExerciseData(lessonId);
+        console.log("Fetched exercise data:", exerciseData);
+        setExercises(exerciseData);
+
+        // Calculate total XP
+        const totalXPPoints = exerciseData.reduce(
+          (sum, exercise) => sum + exercise.xpReward,
+          0
+        );
+        setTotalXP(totalXPPoints);
+
+        setError(null);
+      } catch (error) {
+        console.error("Error fetching exercise data:", error);
+        setError("Failed to load exercises. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchExercises();
+  }, [lessonId]);
+
+  // Load first sentence when exercises are loaded
+  useEffect(() => {
+    if (exercises.length > 0) {
+      loadSentence(0);
+    }
+  }, [exercises]);
 
   const loadSentence = (index) => {
-    // Resetowanie stanu
+    if (!exercises[index]) return;
+
+    // Reset state
     setFeedback({ show: false, isCorrect: false, message: "" });
     setShowCorrectSentence(false);
     setSentenceWords([]);
 
-    // Tworzenie obiektów słów z unikalnymi identyfikatorami
-    const words = sentences[index].words.map((word, i) => ({
+    // Parse wordOptions JSON string and create word objects
+    const wordOptionsArray = JSON.parse(exercises[index].wordOptions);
+    const words = wordOptionsArray.map((word, i) => ({
       id: `word-${index}-${i}`,
       text: word,
       visible: true,
     }));
 
-    // Losowa kolejność słów
+    // Shuffle words randomly
     setAvailableWords([...words].sort(() => Math.random() - 0.5));
   };
 
@@ -90,14 +92,14 @@ const SentenceBuilder = () => {
   };
 
   const handleDragEnd = () => {
-    // Operacja zakończona w handleDrop
+    // Operation completed in handleDrop
   };
 
   const handleDropInSentenceArea = () => {
     if (!draggedItem.current) return;
 
     if (draggedSource.current === "availableWords") {
-      // Przeniesienie słowa z dostępnych słów do zdania
+      // Move word from available words to sentence
       setAvailableWords(
         availableWords.map((word) =>
           word.id === draggedItem.current.id
@@ -115,7 +117,7 @@ const SentenceBuilder = () => {
     if (!draggedItem.current) return;
 
     if (draggedSource.current === "sentenceWords") {
-      // Przeniesienie słowa z powrotem do dostępnych słów
+      // Move word back to available words
       setSentenceWords(
         sentenceWords.filter((word) => word.id !== draggedItem.current.id)
       );
@@ -130,7 +132,7 @@ const SentenceBuilder = () => {
   };
 
   const handleWordClickInSentence = (wordId) => {
-    // Usunięcie słowa ze zdania i dodanie z powrotem do dostępnych słów
+    // Remove word from sentence and add back to available words
     setSentenceWords(sentenceWords.filter((word) => word.id !== wordId));
     setAvailableWords(
       availableWords.map((word) =>
@@ -140,16 +142,24 @@ const SentenceBuilder = () => {
   };
 
   const checkAnswer = () => {
+    if (!exercises[currentSentence]) return;
+
     const userSentence = sentenceWords.map((word) => word.text).join(" ");
+    const correctSentence = exercises[currentSentence].correctSentence;
     const isCorrect =
-      userSentence.toLowerCase() ===
-      sentences[currentSentence].correctSentence.toLowerCase();
+      userSentence.toLowerCase() === correctSentence.toLowerCase();
+
+    // Award XP if correct and not already earned for this exercise
+    if (isCorrect) {
+      const exerciseXP = exercises[currentSentence].xpReward;
+      setEarnedXP((prev) => prev + exerciseXP);
+    }
 
     setFeedback({
       show: true,
       isCorrect,
       message: isCorrect
-        ? "Great job! Your sentence is correct."
+        ? `Great job! Your sentence is correct. +${exercises[currentSentence].xpReward} XP`
         : "Not quite right. Try again.",
     });
 
@@ -157,7 +167,7 @@ const SentenceBuilder = () => {
   };
 
   const resetSentence = () => {
-    // Przywrócenie wszystkich słów do puli
+    // Return all words to the pool
     setAvailableWords(
       availableWords.map((word) => ({ ...word, visible: true }))
     );
@@ -174,27 +184,67 @@ const SentenceBuilder = () => {
   };
 
   const goToNext = () => {
-    if (currentSentence < sentences.length - 1) {
+    if (currentSentence < exercises.length - 1) {
       setCurrentSentence(currentSentence + 1);
       loadSentence(currentSentence + 1);
     }
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="sentence-builder-container">
+        <div className="sentence-builder-card">
+          <div className="loading">Loading exercises...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="sentence-builder-container">
+        <div className="sentence-builder-card">
+          <div className="error">{error}</div>
+        </div>
+      </div>
+    );
+  }
+
+  // No exercises found
+  if (exercises.length === 0) {
+    return (
+      <div className="sentence-builder-container">
+        <div className="sentence-builder-card">
+          <div className="no-exercises">No exercises found.</div>
+        </div>
+      </div>
+    );
+  }
+
+  const currentExercise = exercises[currentSentence];
 
   return (
     <div className="sentence-builder-container">
       <div className="sentence-builder-card">
         <div className="header-container">
           <h1 className="header-title">Sentence Builder</h1>
-          <div className="exercise-counter">
-            {currentSentence + 1}/{sentences.length}
+          <div className="exercise-info">
+            <div className="exercise-counter">
+              {currentSentence + 1}/{exercises.length}
+            </div>
+            <div className="xp-counter">
+              XP: {earnedXP}/{totalXP}
+            </div>
           </div>
         </div>
 
-        <div className="instructions">
-          Arrange the words to form a correct English sentence.
-          <br />
-          Drag words from below to the sentence area.
-        </div>
+        {currentExercise?.translation && (
+          <div className="translation">
+            <strong>Translation:</strong> {currentExercise.translation}
+          </div>
+        )}
 
         <WordsContainer
           words={availableWords}
@@ -218,9 +268,7 @@ const SentenceBuilder = () => {
           isCorrect={feedback.isCorrect}
           message={feedback.message}
           correctSentence={
-            showCorrectSentence
-              ? sentences[currentSentence].correctSentence
-              : null
+            showCorrectSentence ? currentExercise?.correctSentence : null
           }
         />
 
@@ -228,12 +276,12 @@ const SentenceBuilder = () => {
           onPrevious={goToPrevious}
           onNext={goToNext}
           isPreviousDisabled={currentSentence === 0}
-          isNextDisabled={currentSentence === sentences.length - 1}
+          isNextDisabled={currentSentence === exercises.length - 1}
         />
 
         <NextExercise
           onNext={goToNext}
-          isLastSentence={currentSentence === sentences.length - 1}
+          isLastSentence={currentSentence === exercises.length - 1}
           currentSentence={currentSentence}
         />
       </div>
