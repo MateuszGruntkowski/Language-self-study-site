@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const getTranslationQuizData = async (exerciseID) => {
+const getTranslationQuizData = async (lessonId) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/translation-quiz/${exerciseID}`,
+      `http://localhost:8080/api/${lessonId}/translation-quiz`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

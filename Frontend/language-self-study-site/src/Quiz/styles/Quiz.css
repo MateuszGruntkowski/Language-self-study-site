@@ -190,3 +190,42 @@
   align-items: center;
   justify-content: center;
 }
+
+.quiz-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.quiz-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.quiz-indicator-completed {
+  background-color: #4caf50;
+}
+
+.quiz-indicator-current {
+  background-color: #2196f3;
+  transform: scale(1.2);
+}
+
+.quiz-indicator-upcoming {
+  background-color: #e0e0e0;
+}
+
+.quiz-results {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.quiz-percentage {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4caf50;
+  margin-top: 10px;
+}
