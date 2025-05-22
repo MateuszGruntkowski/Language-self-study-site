@@ -90,8 +90,27 @@ public class ListenAndRepeatService {
         return listenAndRepeatExerciseDto;
     }
 
-    public List<ListenAndRepeatExercise> getListenAndRepeatExerciseByLessonId(Long lessonId) {
+    public List<ListenAndRepeatExerciseDto> getListenAndRepeatExerciseByLessonId(Long lessonId) {
+        List<ListenAndRepeatExercise> exercises = listenAndRepeatExerciseRepository.findAllByLesson_lessonId(lessonId);
 
-        return listenAndRepeatExerciseRepository.findAllByLesson_lessonId(lessonId);
+        return exercises.stream()
+                .map(exercise -> {
+                    ListenAndRepeatExerciseDto dto = new ListenAndRepeatExerciseDto();
+                    dto.setExerciseId(exercise.getExerciseId());
+                    dto.setTextToRepeat(exercise.getTextToRepeat());
+                    dto.setTranslation(exercise.getTranslation());
+                    dto.setOrderInLesson(exercise.getOrderInLesson());
+                    dto.setXpReward(exercise.getXpReward());
+                    dto.setDescription(exercise.getDescription());
+                    dto.setType(exercise.getType());
+                    try {
+                        String audioUrl = getAudioUrl(exercise.getExerciseId());
+                        dto.setAudioUrl(audioUrl);
+                    } catch (Exception e) {
+                        dto.setAudioUrl("");
+                    }
+                    return dto;
+                })
+                .toList();
     }
 }

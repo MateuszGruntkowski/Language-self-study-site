@@ -1,56 +1,55 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import getListenAndRepeatExerciseData from "./data";
 import "./styles.css";
 
 const ListenAndRepeatPage = () => {
-  // Initial exerciseId from URL params
+  // Get lessonId from URL params
   const params = useParams();
-  const initialExerciseId = parseInt(params.exerciseId, 10);
+  const lessonId = parseInt(params.lessonId, 10);
 
   // State variables
-  const [currentExerciseId, setCurrentExerciseId] = useState(initialExerciseId);
-  const [currentExercise, setCurrentExercise] = useState(null);
+  const [exercises, setExercises] = useState([]);
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [totalExercises, setTotalExercises] = useState(5); // Każda lekcja ma dokładnie 5 zadań
+  const [error, setError] = useState(null);
 
-  // navigate
+  // Navigate hook
   const navigate = useNavigate();
 
-  // Obliczamy bazowy ID dla lekcji - pierwszy ID w serii 5 zadań dla danej lekcji
-  const calculateBaseExerciseId = (exerciseId) => {
-    return exerciseId - ((exerciseId - 1) % 5);
-  };
-
-  // Bazowy ID dla bieżącej lekcji
-  const [baseExerciseId, setBaseExerciseId] = useState(
-    calculateBaseExerciseId(initialExerciseId)
-  );
-
-  // Fetch exercise data when exerciseId changes
+  // Fetch all exercises for the lesson on component mount
   useEffect(() => {
-    const fetchExercise = async () => {
+    const fetchExercises = async () => {
       try {
         setIsLoading(true);
-        const exerciseData = await getListenAndRepeatExerciseData(
-          currentExerciseId
-        );
-        console.log("Fetched exercise data:", exerciseData);
-        setCurrentExercise(exerciseData);
+        setError(null);
+        const exercisesData = await getListenAndRepeatExerciseData(lessonId);
+        console.log("Fetched exercises data:", exercisesData);
+
+        if (exercisesData && exercisesData.length > 0) {
+          // Sort exercises by orderInLesson to ensure correct order
+          const sortedExercises = exercisesData.sort(
+            (a, b) => a.orderInLesson - b.orderInLesson
+          );
+          setExercises(sortedExercises);
+        } else {
+          setError("No exercises found for this lesson");
+        }
+
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching exercise data:", error);
+        console.error("Error fetching exercises data:", error);
+        setError("Failed to load exercises");
         setIsLoading(false);
       }
     };
 
-    fetchExercise();
-  }, [currentExerciseId]);
+    fetchExercises();
+  }, [lessonId]);
 
-  // Obliczenie pozycji w lekcji (1-5) na podstawie globalnego ID ćwiczenia
-  const getPositionInLesson = (exerciseId) => {
-    return ((exerciseId - 1) % 5) + 1;
-  };
+  // Get current exercise
+  const currentExercise = exercises[currentExerciseIndex];
+  const totalExercises = exercises.length;
 
   // Function to play audio
   const playAudio = () => {
@@ -65,32 +64,64 @@ const ListenAndRepeatPage = () => {
 
   // Navigation functions
   const goToPrevious = () => {
-    // Sprawdzanie czy jesteśmy na pierwszym zadaniu w lekcji
-    if (currentExerciseId > baseExerciseId) {
-      setCurrentExerciseId(currentExerciseId - 1);
+    if (currentExerciseIndex > 0) {
+      setCurrentExerciseIndex(currentExerciseIndex - 1);
     }
   };
 
   const goToNext = () => {
-    // Sprawdzanie czy jesteśmy na ostatnim zadaniu w lekcji
-    if (currentExerciseId < baseExerciseId + totalExercises - 1) {
-      setCurrentExerciseId(currentExerciseId + 1);
+    if (currentExerciseIndex < totalExercises - 1) {
+      setCurrentExerciseIndex(currentExerciseIndex + 1);
     }
   };
 
-  // Przy każdej zmianie exerciseId, aktualizuj baseExerciseId
-  useEffect(() => {
-    setBaseExerciseId(calculateBaseExerciseId(currentExerciseId));
-  }, [currentExerciseId]);
-
   // Function to go to the next exercise type
   const goToNextExerciseType = () => {
-    const linkToNextExercise = `/sentence-arrangement/${currentExerciseId + 1}`;
-    navigate(linkToNextExercise);
+    // Use the first exercise ID from the current lesson to navigate to next exercise type
+    const firstExerciseId = exercises[0]?.exerciseId;
+    if (firstExerciseId) {
+      const linkToNextExercise = `${firstExerciseId}/sentence-arrangement`;
+      navigate(linkToNextExercise);
+    }
   };
 
-  if (isLoading && !currentExercise) {
-    return <div className="lr-loading">Loading...</div>;
+  // Loading state
+  if (isLoading) {
+    return <div className="lr-loading">Loading exercises...</div>;
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="lr-container">
+        <div className="lr-card">
+          <div className="lr-error">
+            <h2>Error</h2>
+            <p>{error}</p>
+            <Link to="/lessons" className="lr-nav-button">
+              Back to Lessons
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // No exercises state
+  if (totalExercises === 0) {
+    return (
+      <div className="lr-container">
+        <div className="lr-card">
+          <div className="lr-error">
+            <h2>No Exercises Found</h2>
+            <p>No Listen & Repeat exercises found for this lesson.</p>
+            <Link to="/lessons" className="lr-nav-button">
+              Back to Lessons
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -99,7 +130,7 @@ const ListenAndRepeatPage = () => {
         <div className="lr-header">
           <h1 className="lr-title">Listen & Repeat</h1>
           <div className="lr-progress">
-            {getPositionInLesson(currentExerciseId)}/{totalExercises}
+            {currentExerciseIndex + 1}/{totalExercises}
           </div>
         </div>
 
@@ -127,43 +158,30 @@ const ListenAndRepeatPage = () => {
               {currentExercise.translation}
             </div>
 
-            {/* <div className="lr-image-container">
-              {currentExercise.imageUrl ? (
-                <img
-                  src={currentExercise.imageUrl}
-                  alt={`${currentExercise.textToRepeat} image`}
-                />
-              ) : (
-                <img
-                  src="/api/placeholder/250/250"
-                  alt={`${currentExercise.textToRepeat} image`}
-                />
-              )}
-            </div> */}
+            {/* XP reward display */}
+
+            <div className="lr-xp-container">
+              <span className="lr-xp-icon">⭐</span>
+              <span className="lr-xp-text">{currentExercise.xpReward} XP</span>
+            </div>
           </>
         )}
 
         <div className="lr-navigation">
           <button
             onClick={goToPrevious}
-            disabled={currentExerciseId === baseExerciseId || isLoading}
+            disabled={currentExerciseIndex === 0}
             className={`lr-nav-button ${
-              currentExerciseId === baseExerciseId || isLoading
-                ? "lr-button-disabled"
-                : ""
+              currentExerciseIndex === 0 ? "lr-button-disabled" : ""
             }`}
           >
             Previous
           </button>
           <button
             onClick={goToNext}
-            disabled={
-              currentExerciseId === baseExerciseId + totalExercises - 1 ||
-              isLoading
-            }
+            disabled={currentExerciseIndex === totalExercises - 1}
             className={`lr-nav-button ${
-              currentExerciseId === baseExerciseId + totalExercises - 1 ||
-              isLoading
+              currentExerciseIndex === totalExercises - 1
                 ? "lr-button-disabled"
                 : ""
             }`}
@@ -172,7 +190,8 @@ const ListenAndRepeatPage = () => {
           </button>
         </div>
 
-        {currentExerciseId === baseExerciseId + totalExercises - 1 && (
+        {/* Show "Next exercise" button only on the last exercise */}
+        {currentExerciseIndex === totalExercises - 1 && (
           <div className="lr-next-exercise-container">
             <button
               onClick={goToNextExerciseType}
@@ -183,7 +202,18 @@ const ListenAndRepeatPage = () => {
           </div>
         )}
 
-        {isLoading && <div className="lr-loading-overlay">Loading...</div>}
+        {/* Exercise indicator dots */}
+        <div className="lr-indicators">
+          {exercises.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentExerciseIndex(index)}
+              className={`lr-indicator ${
+                index === currentExerciseIndex ? "lr-indicator-active" : ""
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

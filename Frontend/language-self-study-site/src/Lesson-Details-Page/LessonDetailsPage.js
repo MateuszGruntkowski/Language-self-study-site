@@ -60,7 +60,7 @@ const LessonDetailsPage = () => {
         "Listen to the audio and repeat the sentences. Focus on pronunciation and intonation.",
       xpReward: listenAndRepeatXpReward,
       icon: "🎧",
-      link: `/${lesson.category}/listen-and-repeat/${lesson.exercises[0].exerciseId}`,
+      link: `/${lesson.lessonId}/listen-and-repeat`,
     },
 
     {
@@ -69,7 +69,7 @@ const LessonDetailsPage = () => {
         "Arrange the words to form a correct sentence. Pay attention to grammar and word order.",
       xpReward: sentenceArrangementXpReward,
       icon: "📝",
-      link: `/sentence-arrangement/${lesson.exercises[5].exerciseId}`,
+      link: `/${lesson.lessonId}/sentence-arrangement`,
     },
 
     {
@@ -78,7 +78,7 @@ const LessonDetailsPage = () => {
         "Translate the sentences from your native language to English. Focus on vocabulary and grammar.",
       xpReward: quizXpReward,
       icon: "❓",
-      link: `/${lesson.category}/translation-quiz/${lesson.exercises[10].exerciseId}`,
+      link: `/${lesson.lessonId}/translation-quiz`,
     },
   ];
 

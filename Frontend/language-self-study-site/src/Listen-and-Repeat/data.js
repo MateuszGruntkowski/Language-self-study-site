@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const getListenAndRepeatExerciseData = async (exerciseID) => {
+const getListenAndRepeatExerciseData = async (lessonId) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/listen-and-repeat/${exerciseID}`,
+      `http://localhost:8080/api/${lessonId}/listen-and-repeat`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

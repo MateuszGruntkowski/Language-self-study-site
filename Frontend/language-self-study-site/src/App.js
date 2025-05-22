@@ -26,17 +26,14 @@ const App = () => {
           element={<LessonDetailsPage />}
         />
         <Route
-          path="/:lessonCategory/listen-and-repeat/:exerciseId"
+          path="/:lessonId/listen-and-repeat/"
           element={<ListenAndRepeatPage />}
         />
         <Route
-          path="/sentence-arrangement/:exerciseId"
+          path="/:lessonId/sentence-arrangement/"
           element={<SentenceBuilder />}
         />
-        <Route
-          path="/:lessonCategory/translation-quiz/:exerciseId"
-          element={<Quiz />}
-        />
+        <Route path="/:lessonId/translation-quiz/" element={<Quiz />} />
       </Routes>
     </Router>
   );

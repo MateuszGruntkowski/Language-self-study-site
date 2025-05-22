@@ -9,9 +9,10 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
-public class ListenAndRepeatExerciseDto {
-    private Long exerciseId;
+public class ListenAndRepeatExerciseDto extends ExerciseDto {
+
     private String textToRepeat;
     private String translation;
     private String audioUrl;
+
 }

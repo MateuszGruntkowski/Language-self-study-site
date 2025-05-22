@@ -15,6 +15,10 @@
   padding: 30px;
   margin-top: 20px;
   text-align: center;
+  /* display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; */
 }
 
 .lr-header {
@@ -92,6 +96,7 @@
 .lr-navigation {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-top: 30px;
 }
 
@@ -141,4 +146,27 @@
 
 .lr-next-exercise-button:hover {
   background-color: #219653;
+}
+
+.lr-xp-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  width: 15%;
+}
+
+.lr-xp-icon {
+  font-size: 18px;
+}
+
+.lr-xp-text {
+  font-weight: bold;
+  color: #8b4513;
+  font-size: 14px;
 }

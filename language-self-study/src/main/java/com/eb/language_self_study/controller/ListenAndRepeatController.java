@@ -29,8 +29,8 @@ public class ListenAndRepeatController {
 
     // zobaczyc czy dziala
     @GetMapping("/{lessonId}/listen-and-repeat")
-    public ResponseEntity<List<ListenAndRepeatExercise>> getListenAndRepeatExerciseByLessonId(@PathVariable Long lessonId) {
-        List<ListenAndRepeatExercise> exercises = listenAndRepeatService.getListenAndRepeatExerciseByLessonId(lessonId);
+    public ResponseEntity<List<ListenAndRepeatExerciseDto>> getListenAndRepeatExerciseByLessonId(@PathVariable Long lessonId) {
+        List<ListenAndRepeatExerciseDto> exercises = listenAndRepeatService.getListenAndRepeatExerciseByLessonId(lessonId);
         return new ResponseEntity<>(exercises, HttpStatus.OK);
     }
 }
