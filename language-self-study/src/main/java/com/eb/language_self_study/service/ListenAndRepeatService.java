@@ -32,7 +32,7 @@ public class ListenAndRepeatService {
     }
 
     private ListenAndRepeatExercise findById(Long exerciseId) {
-        return (ListenAndRepeatExercise) exerciseRepository.findById(exerciseId).orElse(null);
+        return listenAndRepeatExerciseRepository.findById(exerciseId).orElse(null);
     }
 
     public String getAudioUrl(Long exerciseId) {

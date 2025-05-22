@@ -3,23 +3,29 @@ package com.eb.language_self_study.service;
 import com.eb.language_self_study.model.SentenceArrangementExercise;
 import com.eb.language_self_study.model.dto.SentenceArrangementExerciseDto;
 import com.eb.language_self_study.repository.ExerciseRepository;
+import com.eb.language_self_study.repository.SentenceArrangementExerciseRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SentenceArrangementService {
 
     private ExerciseRepository exerciseRepository;
+    private SentenceArrangementExerciseRepository sentenceArrangementExerciseRepository;
     private SentenceArrangementExerciseDto sentenceArrangementExerciseDto;
     private ObjectMapper objectMapper;
 
     public SentenceArrangementService(
             ExerciseRepository exerciseRepository,
+            SentenceArrangementExerciseRepository sentenceArrangementExerciseRepository,
             SentenceArrangementExerciseDto sentenceArrangementExerciseDto,
             ObjectMapper objectMapper){
 
         this.exerciseRepository = exerciseRepository;
+        this.sentenceArrangementExerciseRepository = sentenceArrangementExerciseRepository;
         this.sentenceArrangementExerciseDto = sentenceArrangementExerciseDto;
         this.objectMapper = objectMapper;
     }
@@ -42,5 +48,9 @@ public class SentenceArrangementService {
         sentenceArrangementExerciseDto.setWordOptions(wordOptions);
 
         return sentenceArrangementExerciseDto;
+    }
+
+    public List<SentenceArrangementExercise> getSentenceArrangementExerciseByLessonId(Long lessonId) {
+        return sentenceArrangementExerciseRepository.findAllByLesson_lessonId(lessonId);
     }
 }
