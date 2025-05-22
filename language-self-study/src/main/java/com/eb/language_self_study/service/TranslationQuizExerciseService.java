@@ -39,6 +39,10 @@ public class TranslationQuizExerciseService {
         translationQuizExerciseDto.setQuestion(exercise.getQuestion());
         translationQuizExerciseDto.setCorrectOptionIndex(exercise.getCorrectOptionIndex());
         translationQuizExerciseDto.setTranslation(exercise.getTranslation());
+        translationQuizExerciseDto.setXpReward(exercise.getXpReward());
+        translationQuizExerciseDto.setOrderInLesson(exercise.getOrderInLesson());
+        translationQuizExerciseDto.setType(exercise.getType());
+        translationQuizExerciseDto.setDescription(exercise.getDescription());
 
         String[] options;
         try {

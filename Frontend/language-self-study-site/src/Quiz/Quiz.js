@@ -146,6 +146,13 @@ const LanguageQuiz = () => {
   // Quiz completed state
   if (quizCompleted) {
     const percentage = Math.round((score / totalQuestions) * 100);
+    const totalXP = exercises.reduce(
+      (sum, exercise) => sum + exercise.xpReward,
+      0
+    );
+    const earnedXP = exercises
+      .slice(0, score)
+      .reduce((sum, exercise) => sum + exercise.xpReward, 0);
 
     return (
       <div className="quiz-container">
@@ -156,6 +163,12 @@ const LanguageQuiz = () => {
               Twój wynik: {score} / {totalQuestions}
             </p>
             <p className="quiz-percentage">{percentage}%</p>
+            <div className="quiz-xp-results">
+              <span className="quiz-xp-icon">⭐</span>
+              <span className="quiz-xp-earned">
+                {earnedXP} / {totalXP} XP
+              </span>
+            </div>
           </div>
           <button className="quiz-restart-button" onClick={restartQuiz}>
             Rozpocznij ponownie
@@ -183,6 +196,12 @@ const LanguageQuiz = () => {
 
         <div className="quiz-question">
           <h2>{currentExercise.question}</h2>
+
+          {/* XP reward display */}
+          <div className="quiz-xp-container">
+            <span className="quiz-xp-icon">⭐</span>
+            <span className="quiz-xp-text">{currentExercise.xpReward} XP</span>
+          </div>
         </div>
 
         <div className="quiz-answers">

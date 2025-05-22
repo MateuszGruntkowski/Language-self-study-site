@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const getSentenceArrangementExerciseData = async (exerciseID) => {
+const getSentenceArrangementExerciseData = async (lessonId) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/sentence-arrangement/${exerciseID}`,
+      `http://localhost:8080/api/${lessonId}/sentence-arrangement`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

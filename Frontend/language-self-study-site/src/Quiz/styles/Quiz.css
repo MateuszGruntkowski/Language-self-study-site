@@ -229,3 +229,46 @@
   color: #4caf50;
   margin-top: 10px;
 }
+
+.quiz-xp-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 12px 0;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(255, 215, 0, 0.3);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.quiz-xp-icon {
+  font-size: 16px;
+}
+
+.quiz-xp-text {
+  font-weight: bold;
+  color: #8b4513;
+  font-size: 13px;
+}
+
+.quiz-xp-results {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+}
+
+.quiz-xp-earned {
+  font-size: 16px;
+}

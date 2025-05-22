@@ -10,8 +10,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
-public class TranslationQuizExerciseDto {
-    private Long exerciseId;
+public class TranslationQuizExerciseDto extends ExerciseDto{
     private String question;
     private String[] options;
     private int correctOptionIndex;
