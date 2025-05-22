@@ -1,11 +1,13 @@
 import { useEffect, useRef, React } from "react";
+import { useNavigate } from "react-router-dom";
 import "./styles/NextExercise.css";
 
-const NextExercise = ({ isLastSentence, currentSentence }) => {
+const NextExercise = ({ isLastSentence, currentSentence, lessonId }) => {
+  const navigate = useNavigate();
   // Funkcja do przejścia do następnego ćwiczenia
-  const goToNextExercise = () => {
-    // W rzeczywistej implementacji tutaj byłoby przekierowanie do następnego ćwiczenia
-    alert("Przejście do następnego ćwiczenia");
+  const goToNextExerciseType = () => {
+    const linkToNextExercise = `/${lessonId}/translation-quiz`;
+    navigate(linkToNextExercise);
   };
 
   // Funkcja do wyświetlania przycisku "Następne ćwiczenie"
@@ -23,12 +25,11 @@ const NextExercise = ({ isLastSentence, currentSentence }) => {
   }, [currentSentence]);
 
   return (
-    <div
-      className="sb-next-exercise-container"
-      //   style={{ display: "flex" }}
-      ref={nextExerciseRef}
-    >
-      <button onClick={goToNextExercise} className="sb-next-exercise-button">
+    <div className="sb-next-exercise-container" ref={nextExerciseRef}>
+      <button
+        onClick={goToNextExerciseType}
+        className="sb-next-exercise-button"
+      >
         Next exercise
       </button>
     </div>

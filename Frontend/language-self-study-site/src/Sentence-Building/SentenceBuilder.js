@@ -280,7 +280,7 @@ const SentenceBuilder = () => {
         />
 
         <NextExercise
-          onNext={goToNext}
+          lessonId={lessonId}
           isLastSentence={currentSentence === exercises.length - 1}
           currentSentence={currentSentence}
         />

@@ -77,12 +77,8 @@ const ListenAndRepeatPage = () => {
 
   // Function to go to the next exercise type
   const goToNextExerciseType = () => {
-    // Use the first exercise ID from the current lesson to navigate to next exercise type
-    const firstExerciseId = exercises[0]?.exerciseId;
-    if (firstExerciseId) {
-      const linkToNextExercise = `${firstExerciseId}/sentence-arrangement`;
-      navigate(linkToNextExercise);
-    }
+    const linkToNextExercise = `/${lessonId}/sentence-arrangement`;
+    navigate(linkToNextExercise);
   };
 
   // Loading state
