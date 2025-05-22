@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,11 +82,23 @@ public class UserService {
                 .map(user -> new UserLeaderboardEntryDto(
                         user.getUserId(),
                         user.getUsername(),
-                        user.getUserStatistics().getTotalXp()))
+                        user.getUserStatistics().getTotalXp(),
+                        user.getProfilePicName(),
+                        user.getProfilePicType(),
+                        encodePictureToBase64(user)))
                 .collect(Collectors.toList());
     }
 
     public boolean userExists(Long userId) {
         return userRepository.existsById(userId);
+    }
+
+    public String encodePictureToBase64(User user){
+        String base64 = null;
+        byte[] imageData = user.getProfilePicData();
+        if (imageData != null) {
+            base64 = "data: " + user.getProfilePicType() + ";base64, " + Base64.getEncoder().encodeToString(imageData);
+        }
+        return base64;
     }
 }

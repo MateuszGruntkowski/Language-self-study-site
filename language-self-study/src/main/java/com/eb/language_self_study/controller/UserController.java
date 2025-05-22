@@ -56,7 +56,7 @@ public class UserController {
         return userService.verify(user);
     }
 
-    @GetMapping("/top10users")
+    @GetMapping("/ranking")
     public ResponseEntity<List<UserLeaderboardEntryDto>> getTop10Users() {
         return new ResponseEntity<>(userService.getTopUsers(), HttpStatus.OK);
     }

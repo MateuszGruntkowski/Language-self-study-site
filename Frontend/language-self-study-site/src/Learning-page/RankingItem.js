@@ -16,16 +16,16 @@ const RankingItem = ({ user, position }) => {
       <div className={`ranking-position ${positionClass}`}>{position}</div>
       <div className="user-info">
         <img
-          src={user.avatar}
+          src={user.profilePicBase64}
           alt="Avatar użytkownika"
           className="user-avatar"
         />
         <div className="user-details">
-          <p className="user-name">{user.name}</p>
-          <p className="user-level">Poziom {user.level}</p>
+          <p className="user-name">{user.username}</p>
+          {/* <p className="user-level">Poziom {user.level}</p> */}
         </div>
       </div>
-      <div className="user-xp">{user.xp} XP</div>
+      <div className="user-xp">{user.totalXp} XP</div>
     </li>
   );
 };
