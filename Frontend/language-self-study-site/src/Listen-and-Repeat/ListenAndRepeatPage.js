@@ -94,7 +94,7 @@ const ListenAndRepeatPage = () => {
           <div className="lr-error">
             <h2>Error</h2>
             <p>{error}</p>
-            <Link to="/lessons" className="lr-nav-button">
+            <Link to="/learn" className="lr-nav-button">
               Back to Lessons
             </Link>
           </div>
@@ -111,7 +111,7 @@ const ListenAndRepeatPage = () => {
           <div className="lr-error">
             <h2>No Exercises Found</h2>
             <p>No Listen & Repeat exercises found for this lesson.</p>
-            <Link to="/lessons" className="lr-nav-button">
+            <Link to="/learn" className="lr-nav-button">
               Back to Lessons
             </Link>
           </div>

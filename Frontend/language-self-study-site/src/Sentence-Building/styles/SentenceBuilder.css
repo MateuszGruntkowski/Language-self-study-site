@@ -36,3 +36,28 @@
   margin-bottom: 2rem;
   text-align: center;
 }
+
+.sa-xp-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 12px 0;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(255, 215, 0, 0.3);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sa-xp-icon {
+  font-size: 16px;
+}
+
+.sa-xp-text {
+  font-weight: bold;
+  color: #8b4513;
+  font-size: 13px;
+}

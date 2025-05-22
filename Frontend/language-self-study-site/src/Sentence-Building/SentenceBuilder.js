@@ -17,8 +17,6 @@ const SentenceBuilder = () => {
   const [exercises, setExercises] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [totalXP, setTotalXP] = useState(0);
-  const [earnedXP, setEarnedXP] = useState(0);
 
   const [currentSentence, setCurrentSentence] = useState(0);
   const [availableWords, setAvailableWords] = useState([]);
@@ -40,14 +38,6 @@ const SentenceBuilder = () => {
         const exerciseData = await getSentenceArrangementExerciseData(lessonId);
         console.log("Fetched exercise data:", exerciseData);
         setExercises(exerciseData);
-
-        // Calculate total XP
-        const totalXPPoints = exerciseData.reduce(
-          (sum, exercise) => sum + exercise.xpReward,
-          0
-        );
-        setTotalXP(totalXPPoints);
-
         setError(null);
       } catch (error) {
         console.error("Error fetching exercise data:", error);
@@ -149,12 +139,6 @@ const SentenceBuilder = () => {
     const isCorrect =
       userSentence.toLowerCase() === correctSentence.toLowerCase();
 
-    // Award XP if correct and not already earned for this exercise
-    if (isCorrect) {
-      const exerciseXP = exercises[currentSentence].xpReward;
-      setEarnedXP((prev) => prev + exerciseXP);
-    }
-
     setFeedback({
       show: true,
       isCorrect,
@@ -234,8 +218,9 @@ const SentenceBuilder = () => {
             <div className="exercise-counter">
               {currentSentence + 1}/{exercises.length}
             </div>
-            <div className="xp-counter">
-              XP: {earnedXP}/{totalXP}
+            <div className="sa-xp-container">
+              <span className="sa-xp-icon">⭐</span>
+              <span className="sa-xp-text">{currentExercise.xpReward} XP</span>
             </div>
           </div>
         </div>
@@ -280,9 +265,10 @@ const SentenceBuilder = () => {
         />
 
         <NextExercise
-          lessonId={lessonId}
+          onNext={goToNext}
           isLastSentence={currentSentence === exercises.length - 1}
           currentSentence={currentSentence}
+          lessonId={lessonId}
         />
       </div>
     </div>

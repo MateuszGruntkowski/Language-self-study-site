@@ -220,7 +220,9 @@ const LanguageQuiz = () => {
         {showFeedback && (
           <div className="quiz-feedback">
             {selectedAnswer.index === currentExercise.correctOptionIndex ? (
-              <p className="quiz-feedback-correct">Poprawna odpowiedź!</p>
+              <p className="quiz-feedback-correct">
+                Poprawna odpowiedź! +{currentExercise.xpReward} XP
+              </p>
             ) : (
               <p className="quiz-feedback-incorrect">
                 Niepoprawnie. Poprawna odpowiedź:{" "}
