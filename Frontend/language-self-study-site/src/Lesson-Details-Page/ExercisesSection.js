@@ -25,7 +25,7 @@ const ExercisesSection = ({ exercises }) => {
           <ExerciseCard
             key={index}
             icon={exercise.icon}
-            type={exercise.type}
+            type={exercise.type.replaceAll("_", " ")}
             description={exercise.description}
             xp={exercise.xpReward}
             link={exercise.link}

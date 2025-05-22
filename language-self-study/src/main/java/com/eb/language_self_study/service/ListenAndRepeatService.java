@@ -3,6 +3,7 @@ package com.eb.language_self_study.service;
 import com.eb.language_self_study.model.ListenAndRepeatExercise;
 import com.eb.language_self_study.model.dto.ListenAndRepeatExerciseDto;
 import com.eb.language_self_study.repository.ExerciseRepository;
+import com.eb.language_self_study.repository.ListenAndRepeatExerciseRepository;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,15 +16,18 @@ import org.springframework.web.client.RestTemplate;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Service
 public class ListenAndRepeatService {
 
     private final ExerciseRepository exerciseRepository;
+    private final ListenAndRepeatExerciseRepository listenAndRepeatExerciseRepository;
     private ListenAndRepeatExerciseDto listenAndRepeatExerciseDto;
 
-    public ListenAndRepeatService(ExerciseRepository exerciseRepository, ListenAndRepeatExerciseDto listenAndRepeatExerciseDto) {
+    public ListenAndRepeatService(ExerciseRepository exerciseRepository, ListenAndRepeatExerciseRepository listenAndRepeatExerciseRepository, ListenAndRepeatExerciseDto listenAndRepeatExerciseDto) {
         this.exerciseRepository = exerciseRepository;
+        this.listenAndRepeatExerciseRepository = listenAndRepeatExerciseRepository;
         this.listenAndRepeatExerciseDto = listenAndRepeatExerciseDto;
     }
 
@@ -84,5 +88,10 @@ public class ListenAndRepeatService {
         }
 
         return listenAndRepeatExerciseDto;
+    }
+
+    public List<ListenAndRepeatExercise> getListenAndRepeatExerciseByLessonId(Long lessonId) {
+
+        return listenAndRepeatExerciseRepository.findAllByLesson_lessonId(lessonId);
     }
 }
