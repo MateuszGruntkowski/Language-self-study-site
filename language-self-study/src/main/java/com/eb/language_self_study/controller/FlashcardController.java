@@ -12,6 +12,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class FlashcardController {
 
+    // DOPISAC OBSLUGE GDY NIE MA BODY DLA Create I Update!
     private FlashcardService flashcardService;
 
     public FlashcardController(FlashcardService flashcardService) {
