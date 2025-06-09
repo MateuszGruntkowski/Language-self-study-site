@@ -25,7 +25,7 @@ public class Flashcard {
     private int xpReward;
 
     @ManyToOne
-    @JoinColumn(name = "flashcardSet_id", nullable = false)
+    @JoinColumn(name = "flashcard_set_id", nullable = false)
     @JsonBackReference
     private FlashcardSet flashcardSet;
 
@@ -33,16 +33,5 @@ public class Flashcard {
     protected void onCreate() {
         this.createdAt = new Date();
     }
-
-    @Override
-    public String toString() {
-        return "Flashcard{" +
-                "id=" + flashcardId +
-                ", frontContent='" + frontContent + '\'' +
-                ", backContent='" + backContent + '\'' +
-                ", flashcardSetId=" + (flashcardSet != null ? flashcardSet.getFlashcardSetId() : null) +
-                '}';
-    }
-
 
 }

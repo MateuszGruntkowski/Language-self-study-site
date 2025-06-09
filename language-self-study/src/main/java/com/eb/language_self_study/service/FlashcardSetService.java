@@ -13,7 +13,11 @@ import com.eb.language_self_study.model.dto.FlashcardSetDto;
 import com.eb.language_self_study.model.dto.UserDto;
 import com.eb.language_self_study.repository.FlashcardSetRepository;
 import com.eb.language_self_study.repository.UserRepository;
+import jakarta.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,20 +27,23 @@ import java.util.stream.Collectors;
 public class FlashcardSetService {
 
     private final UserService userService;
-    private FlashcardSetRepository flashcardSetRepository;
-    private FlashcardSetMapperImpl mapper;
-    private FlashcardMapperImpl flashcardMapper;
-    private UserMapperImpl userMapper;
+    private final FlashcardSetRepository flashcardSetRepository;
+    private final FlashcardSetMapperImpl flashcardSetMapper;
+    private final FlashcardMapperImpl flashcardMapper;
+    private final UserMapperImpl userMapper;
+
+    @Autowired
+    private EntityManager entityManager;
 
     public FlashcardSetService (FlashcardSetRepository flashcardSetRepository,
                                 UserRepository userRepository,
-                                FlashcardSetMapperImpl mapper,
+                                FlashcardSetMapperImpl flashcardSetMapper,
                                 FlashcardMapperImpl flashcardMapper,
                                 UserService userService,
                                 UserMapperImpl userMapper) {
         this.flashcardSetRepository = flashcardSetRepository;
 
-        this.mapper = mapper;
+        this.flashcardSetMapper = flashcardSetMapper;
         this.flashcardMapper = flashcardMapper;
         this.userService = userService;
         this.userMapper = userMapper;
@@ -51,7 +58,7 @@ public class FlashcardSetService {
 
         return flashcardSetRepository.findFlashcardSetByUserUserId(userId)
                 .stream()
-                .map(flashcardSet -> mapper.mapToDto(flashcardSet))
+                .map(flashcardSet -> flashcardSetMapper.mapToDto(flashcardSet))
                 .collect(Collectors.toList());
     }
 
@@ -60,7 +67,7 @@ public class FlashcardSetService {
 
         User user = userMapper.mapFromDto(userDto);
 
-        FlashcardSet flashcardSet = mapper.mapToEntity(flashcardSetDto);
+        FlashcardSet flashcardSet = flashcardSetMapper.mapToEntity(flashcardSetDto);
 
         flashcardSet.setUser(user);
 
@@ -74,26 +81,26 @@ public class FlashcardSetService {
             }
             flashcardSet.setFlashcards(flashcards);
 
-//            System.out.println(flashcards);
         }else{
             flashcardSet.setFlashcards(new ArrayList<>());
         }
 
         FlashcardSet savedSet = flashcardSetRepository.save(flashcardSet);
 
-        return mapper.mapToDto(savedSet);
+        return flashcardSetMapper.mapToDto(savedSet);
     }
 
-
+    @Transactional
     public void deleteFlashcardSet(Long userId, Long flashcardSetId) {
 
         FlashcardSet flashcardSet = flashcardSetRepository.findById(flashcardSetId)
-                .orElseThrow(() -> new ResourceNotFoundException("Flashcard set not found with id: " + flashcardSetId));
+                .orElseThrow(() -> new ResourceNotFoundException("Flashcard set not found"));
 
         if(!flashcardSet.getUser().getUserId().equals(userId)){
             throw new UnauthorizedException("User does not have permission to delete this flashcard set");
         }
-        flashcardSetRepository.deleteById(flashcardSetId);
+
+        flashcardSet.getUser().getFlashcardSets().remove(flashcardSet);
     }
 
 
@@ -122,7 +129,7 @@ public class FlashcardSetService {
 
         FlashcardSet updatedSet = flashcardSetRepository.save(flashcardSet);
         System.out.println("Updated flashcard set: " + updatedSet);
-        return mapper.mapToDto(updatedSet);
+        return flashcardSetMapper.mapToDto(updatedSet);
     }
 
     public FlashcardSetDto getFlashcardSetById(Long userId, Long setId) {
@@ -138,7 +145,7 @@ public class FlashcardSetService {
             throw new UnauthorizedException("User does not have permission to access this flashcard set");
         }
 
-        return mapper.mapToDto(flashcardSet);
+        return flashcardSetMapper.mapToDto(flashcardSet);
     }
 
     public boolean flashcardSetExistsAndBelongsToUser(Long userId, Long setId) {

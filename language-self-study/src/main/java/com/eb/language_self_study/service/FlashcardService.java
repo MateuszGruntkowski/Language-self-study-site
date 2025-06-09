@@ -51,12 +51,10 @@ public class FlashcardService {
             throw new ResourceNotFoundException("Flashcard set not found with id: " + flashcardSetId);
         }
 
-        List<FlashcardDto> flashcards = flashcardRepository.findFlashcardsByFlashcardSetFlashcardSetId(flashcardSetId)
+        return flashcardRepository.findFlashcardsByFlashcardSetFlashcardSetId(flashcardSetId)
                 .stream()
                 .map(flashcard -> flashcardMapper.mapFlashcardToDto(flashcard))
                 .toList();
-
-        return flashcards;
     }
 
 
@@ -134,7 +132,7 @@ public class FlashcardService {
         return flashcardMapper.mapFlashcardToDto(existingFlashcard);
     }
 
-    public boolean flashcardExists(Long flashcardId) {
-        return flashcardRepository.existsById(flashcardId);
-    }
+//    public boolean flashcardExists(Long flashcardId) {
+//        return flashcardRepository.existsById(flashcardId);
+//    }
 }

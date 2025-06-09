@@ -3,13 +3,11 @@ package com.eb.language_self_study.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -31,6 +29,7 @@ public class FlashcardSet {
 
     @OneToMany(mappedBy = "flashcardSet", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @ToString.Exclude
     private List<Flashcard> flashcards;
 
     @PrePersist
