@@ -3,6 +3,7 @@ package com.eb.language_self_study.controller;
 import com.eb.language_self_study.model.User;
 import com.eb.language_self_study.model.dto.UserDto;
 import com.eb.language_self_study.model.dto.UserLeaderboardEntryDto;
+import com.eb.language_self_study.model.dto.UserProfilePicDto;
 import com.eb.language_self_study.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -32,6 +34,12 @@ public class UserController {
     public ResponseEntity<UserDto> getProfile(Authentication authentication) {
         String username = authentication.getName();
         return new ResponseEntity<>(userService.getUserByUsername(username), HttpStatus.OK);
+    }
+
+    @GetMapping("/userProfilePic")
+    public ResponseEntity<UserProfilePicDto> getUserProfilePic(Authentication authentication) {
+        String username = authentication.getName();
+        return new ResponseEntity<>(userService.getUserProfilePic(username), HttpStatus.OK);
     }
 
     @PostMapping("/register")
@@ -59,6 +67,16 @@ public class UserController {
     @GetMapping("/ranking")
     public ResponseEntity<List<UserLeaderboardEntryDto>> getTop10Users() {
         return new ResponseEntity<>(userService.getTopUsers(), HttpStatus.OK);
+    }
+
+    @PatchMapping("/updateProfilePic")
+    public ResponseEntity<UserProfilePicDto> updateProfilePic(
+            Authentication authentication,
+            @RequestPart(name = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+
+        String username = authentication.getName();
+        UserProfilePicDto updatedProfilePic = userService.updateUserProfilePic(username, imageFile);
+        return new ResponseEntity<>(updatedProfilePic, HttpStatus.OK);
     }
 
 }

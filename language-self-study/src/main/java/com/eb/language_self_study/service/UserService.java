@@ -5,6 +5,7 @@ import com.eb.language_self_study.mappers.impl.UserMapperImpl;
 import com.eb.language_self_study.model.User;
 import com.eb.language_self_study.model.dto.UserDto;
 import com.eb.language_self_study.model.dto.UserLeaderboardEntryDto;
+import com.eb.language_self_study.model.dto.UserProfilePicDto;
 import com.eb.language_self_study.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -75,6 +76,19 @@ public class UserService {
         return userMapper.mapToDto(user);
     }
 
+    public UserProfilePicDto getUserProfilePic(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new ResourceNotFoundException("User not found");
+        }
+
+        return new UserProfilePicDto(
+                user.getProfilePicName(),
+                user.getProfilePicType(),
+                encodeProfilePicToBase64(user)
+        );
+    }
+
     public List<UserLeaderboardEntryDto> getTopUsers() {
         List<User> topUsers = userRepository.findTopUsersByXp(PageRequest.of(0, 10));
 
@@ -85,7 +99,7 @@ public class UserService {
                         user.getUserStatistics().getTotalXp(),
                         user.getProfilePicName(),
                         user.getProfilePicType(),
-                        encodePictureToBase64(user)))
+                        encodeProfilePicToBase64(user)))
                 .collect(Collectors.toList());
     }
 
@@ -93,12 +107,34 @@ public class UserService {
         return userRepository.existsById(userId);
     }
 
-    public String encodePictureToBase64(User user){
+    public String encodeProfilePicToBase64(User user){
         String base64 = null;
         byte[] imageData = user.getProfilePicData();
         if (imageData != null) {
             base64 = "data: " + user.getProfilePicType() + ";base64, " + Base64.getEncoder().encodeToString(imageData);
         }
         return base64;
+    }
+
+    public UserProfilePicDto updateUserProfilePic(String username, MultipartFile imageFile) throws IOException {
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found");
+        }
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            user.setProfilePicName(imageFile.getOriginalFilename());
+            user.setProfilePicType(imageFile.getContentType());
+            user.setProfilePicData(imageFile.getBytes());
+
+            userRepository.save(user);
+        }
+
+        return new UserProfilePicDto(
+                user.getProfilePicName(),
+                user.getProfilePicType(),
+                encodeProfilePicToBase64(user)
+        );
     }
 }
