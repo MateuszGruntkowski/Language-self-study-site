@@ -36,6 +36,12 @@
   margin-bottom: 30px;
 }
 
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .stat-card {
   background-color: #f5f7fa;
   border-radius: 8px;
@@ -78,23 +84,4 @@
   font-size: 40px;
   font-weight: bold;
   color: rgb(162, 9, 9);
-}
-
-.streak-card {
-  background: #f5f7fa;
-  color: rgb(14, 187, 23);
-  border-radius: 8px;
-  padding: 25px;
-  text-align: center;
-  margin-top: 10px;
-}
-
-.streak-title {
-  font-size: 18px;
-  margin-bottom: 15px;
-}
-
-.streak-value {
-  font-size: 40px;
-  font-weight: bold;
 }

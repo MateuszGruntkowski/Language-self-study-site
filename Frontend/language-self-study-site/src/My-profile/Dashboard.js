@@ -10,8 +10,20 @@ const Dashboard = ({ user }) => {
 
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-value">{userStatistics.totalHoursSpent}</div>
-          <div class="stat-label">Hours Studied</div>
+          <div class="stat-value">{userStatistics.listenAndRepeatCount}</div>
+          <div class="stat-label">Listen & Repeat</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-value">
+            {userStatistics.sentenceArrangementCount}
+          </div>
+          <div class="stat-label">Sentence Arrangement</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-value">{userStatistics.translationQuizCount}</div>
+          <div class="stat-label">Translation Quiz</div>
         </div>
 
         <div class="stat-card">
@@ -20,21 +32,9 @@ const Dashboard = ({ user }) => {
         </div>
 
         <div class="stat-card">
-          <div class="stat-value">{userStatistics.completedLessonsCount}</div>
-          <div class="stat-label">Lessons Completed</div>
-        </div>
-
-        <div class="stat-card">
           <div class="stat-value">{userStatistics.completedExercisesCount}</div>
           <div class="stat-label">Exercises Completed</div>
         </div>
-      </div>
-
-      <div class="streak-card">
-        <div class="streak-title">
-          <span style={{ color: "#555555" }}>Daily Streak</span>
-        </div>
-        <div class="streak-value">{userStatistics.dailyStreak} Days</div>
       </div>
 
       <div class="rank-card">
