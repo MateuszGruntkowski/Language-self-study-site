@@ -13,9 +13,87 @@ const ListenAndRepeatPage = () => {
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [completedExercises, setCompletedExercises] = useState(new Set());
+  const [isUpdatingStats, setIsUpdatingStats] = useState(false);
 
   // Navigate hook
   const navigate = useNavigate();
+
+  // Function to get auth token (adjust this based on your auth system)
+  const getAuthToken = () => {
+    return localStorage.getItem("token");
+  };
+
+  // Function to add XP for individual exercise
+  const addXPForExercise = async (xp) => {
+    const token = getAuthToken();
+    if (!token) {
+      console.error("No auth token found");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/user-statistics/add-xp",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            xp: xp,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to add XP: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log("XP added successfully:", result);
+    } catch (error) {
+      console.error("Error adding XP:", error);
+    }
+  };
+
+  // Function to update statistics after completing all exercises
+  const updateFinalStatistics = async () => {
+    const token = getAuthToken();
+    if (!token) {
+      console.error("No auth token found");
+      return;
+    }
+
+    setIsUpdatingStats(true);
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/user-statistics/update-statistics",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            exerciseType: "LISTEN_AND_REPEAT",
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to update statistics: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log("Statistics updated successfully:", result);
+    } catch (error) {
+      console.error("Error updating statistics:", error);
+    } finally {
+      setIsUpdatingStats(false);
+    }
+  };
 
   // Fetch all exercises for the lesson on component mount
   useEffect(() => {
@@ -51,14 +129,29 @@ const ListenAndRepeatPage = () => {
   const currentExercise = exercises[currentExerciseIndex];
   const totalExercises = exercises.length;
 
-  // Function to play audio
-  const playAudio = () => {
+  // Function to play audio and mark exercise as completed
+  const playAudio = async () => {
     if (currentExercise && currentExercise.audioUrl) {
       const audio = new Audio(currentExercise.audioUrl);
-      audio.play().catch((error) => {
+
+      try {
+        await audio.play();
+
+        // Mark exercise as completed and add XP if not already completed
+        if (!completedExercises.has(currentExerciseIndex)) {
+          setCompletedExercises(
+            (prev) => new Set([...prev, currentExerciseIndex])
+          );
+
+          // Add XP for this exercise
+          if (currentExercise.xpReward) {
+            await addXPForExercise(currentExercise.xpReward);
+          }
+        }
+      } catch (error) {
         console.error("Failed to play audio:", error);
         alert(`Could not play audio for "${currentExercise.textToRepeat}"`);
-      });
+      }
     }
   };
 
@@ -76,10 +169,18 @@ const ListenAndRepeatPage = () => {
   };
 
   // Function to go to the next exercise type
-  const goToNextExerciseType = () => {
+  const goToNextExerciseType = async () => {
+    // Check if all exercises are completed and update final statistics
+    if (completedExercises.size === totalExercises) {
+      await updateFinalStatistics();
+    }
+
     const linkToNextExercise = `/${lessonId}/sentence-arrangement`;
     navigate(linkToNextExercise);
   };
+
+  // Check if all exercises are completed
+  const allExercisesCompleted = completedExercises.size === totalExercises;
 
   // Loading state
   if (isLoading) {
@@ -154,11 +255,16 @@ const ListenAndRepeatPage = () => {
               {currentExercise.translation}
             </div>
 
-            {/* XP reward display */}
-
+            {/* XP reward display with completion status */}
             <div className="lr-xp-container">
-              <span className="lr-xp-icon">⭐</span>
-              <span className="lr-xp-text">{currentExercise.xpReward} XP</span>
+              <span className="lr-xp-icon">
+                {completedExercises.has(currentExerciseIndex) ? "✅" : "⭐"}
+              </span>
+              <span className="lr-xp-text">
+                {currentExercise.xpReward} XP
+                {completedExercises.has(currentExerciseIndex) &&
+                  " - Completed!"}
+              </span>
             </div>
           </>
         )}
@@ -191,14 +297,20 @@ const ListenAndRepeatPage = () => {
           <div className="lr-next-exercise-container">
             <button
               onClick={goToNextExerciseType}
+              disabled={isUpdatingStats}
               className="lr-next-exercise-button"
             >
-              Next exercise
+              {isUpdatingStats ? "Updating..." : "Next exercise"}
             </button>
+            {allExercisesCompleted && (
+              <div className="lr-completion-message">
+                🎉 All exercises completed! Great job!
+              </div>
+            )}
           </div>
         )}
 
-        {/* Exercise indicator dots */}
+        {/* Exercise indicator dots with completion status */}
         <div className="lr-indicators">
           {exercises.map((_, index) => (
             <button
@@ -206,6 +318,8 @@ const ListenAndRepeatPage = () => {
               onClick={() => setCurrentExerciseIndex(index)}
               className={`lr-indicator ${
                 index === currentExerciseIndex ? "lr-indicator-active" : ""
+              } ${
+                completedExercises.has(index) ? "lr-indicator-completed" : ""
               }`}
             />
           ))}

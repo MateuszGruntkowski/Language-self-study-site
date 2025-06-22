@@ -24,12 +24,5 @@ public class SentenceArrangementExercise extends Exercise {
 
     private String translation;
 
-//    public void setWordOptions(String[] options) throws JsonProcessingException {
-//        this.wordOptions = new ObjectMapper().writeValueAsString(options);
-//    }
-//
-//    public String[] getWordOptions() throws JsonProcessingException {
-//        return new ObjectMapper().readValue(this.wordOptions, String[].class);
-//    }
 
 }
