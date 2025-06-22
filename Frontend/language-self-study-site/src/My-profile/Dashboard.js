@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles/Dashboard.css";
 
-const Dashboard = ({ user }) => {
+const Dashboard = ({ user, rankingPosition }) => {
   const userStatistics = user.userStatistics || {};
   console.log("User statistics:", userStatistics);
   return (
@@ -42,7 +42,7 @@ const Dashboard = ({ user }) => {
           {" "}
           <span style={{ color: "#555555" }}>Leaderboard Position</span>
         </div>
-        <div class="rank-value">#42</div>
+        <div class="rank-value">{rankingPosition}</div>
       </div>
     </div>
   );

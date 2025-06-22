@@ -85,4 +85,9 @@ public class UserStatisticsService {
                 userStatistics.getTotalXp()
         );
     }
+
+    public Integer getUserRanking(Long userId) {
+        Integer rank = userStatisticsRepository.findUserRankingByUserId(userId);
+        return rank != null ? rank : -1; // -1 jeżeli nie znaleziono
+    }
 }

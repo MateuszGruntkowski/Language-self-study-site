@@ -30,3 +30,20 @@ export const getUserProfilePic = async () => {
     console.error("Błąd podczas pobierania zdjęcia profilowego:", error);
   }
 };
+
+export const getUserRankingPosition = async () => {
+  try {
+    const response = await axios.get(
+      "http://localhost:8080/api/user-ranking-position",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    console.log("Response from API for ranking position:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Błąd podczas pobierania pozycji w rankingu:", error);
+  }
+};

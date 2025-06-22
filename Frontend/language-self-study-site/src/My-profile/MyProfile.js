@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Dashboard from "./Dashboard";
 import EditProfile from "./EditProfile";
-import { getUserProfilePic, getUserData } from "./data";
+import { getUserProfilePic, getUserData, getUserRankingPosition } from "./data";
 
 import "./styles/MyProfile.css";
 
 const MyProfile = () => {
   const [userData, setUserData] = useState({});
   const [profilePicture, setProfilePicture] = useState(null);
+  const [rankingPosition, setRankingPosition] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -33,8 +34,19 @@ const MyProfile = () => {
       }
     };
 
+    const fetchUserRankingPosition = async () => {
+      try {
+        const rankingPosition = await getUserRankingPosition();
+        setRankingPosition(rankingPosition);
+        console.log("Pobrana pozycja w rankingu:", rankingPosition);
+      } catch (error) {
+        console.error("Błąd podczas pobierania pozycji w rankingu:", error);
+      }
+    };
+
     fetchUserData();
     fetchProfilePicture();
+    fetchUserRankingPosition();
   }, []);
 
   return (
@@ -43,7 +55,7 @@ const MyProfile = () => {
         <h1 class="profile-title">My Profile</h1>
       </div>
       <div class="profile-content">
-        <Dashboard user={userData} />
+        <Dashboard user={userData} rankingPosition={rankingPosition} />
         <EditProfile
           user={userData}
           profilePicture={profilePicture}
