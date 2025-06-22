@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import getTranslationQuizData from "./data";
+import {
+  addXpToUser,
+  updateUserStatistics,
+} from "../Services/userProgressService";
 import "./styles/Quiz.css";
 
 const LanguageQuiz = () => {
@@ -47,7 +51,7 @@ const LanguageQuiz = () => {
   const currentExercise = exercises[currentQuestionIndex];
   const totalQuestions = exercises.length;
 
-  const handleAnswerClick = (answer, answerIndex) => {
+  const handleAnswerClick = async (answer, answerIndex) => {
     if (showFeedback) return;
 
     setSelectedAnswer({ answer, index: answerIndex });
@@ -56,10 +60,17 @@ const LanguageQuiz = () => {
     // Check if answer is correct using correctOptionIndex
     if (answerIndex === currentExercise.correctOptionIndex) {
       setScore((prev) => prev + 1);
+      // Add XP for correct answer
+      try {
+        await addXpToUser(currentExercise.xpReward);
+      } catch (error) {
+        // XP addition failed, but continue with quiz
+        console.error("Failed to add XP, but continuing quiz");
+      }
     }
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     setSelectedAnswer(null);
     setShowFeedback(false);
 
@@ -67,6 +78,13 @@ const LanguageQuiz = () => {
       setCurrentQuestionIndex((prev) => prev + 1);
     } else {
       setQuizCompleted(true);
+      // Update statistics when quiz is completed
+      try {
+        await updateUserStatistics("TRANSLATION_QUIZ");
+      } catch (error) {
+        // Statistics update failed, but quiz is still completed
+        console.error("Failed to update statistics, but quiz completed");
+      }
     }
   };
 

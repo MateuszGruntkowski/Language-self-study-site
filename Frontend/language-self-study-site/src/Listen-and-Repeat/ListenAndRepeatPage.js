@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import getListenAndRepeatExerciseData from "./data";
+import {
+  addXpToUser,
+  updateUserStatistics,
+} from "../Services/userProgressService";
 import "./styles.css";
 
 const ListenAndRepeatPage = () => {
@@ -14,86 +18,9 @@ const ListenAndRepeatPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [completedExercises, setCompletedExercises] = useState(new Set());
-  const [isUpdatingStats, setIsUpdatingStats] = useState(false);
 
   // Navigate hook
   const navigate = useNavigate();
-
-  // Function to get auth token (adjust this based on your auth system)
-  const getAuthToken = () => {
-    return localStorage.getItem("token");
-  };
-
-  // Function to add XP for individual exercise
-  const addXPForExercise = async (xp) => {
-    const token = getAuthToken();
-    if (!token) {
-      console.error("No auth token found");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        "http://localhost:8080/api/user-statistics/add-xp",
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            xp: xp,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to add XP: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      console.log("XP added successfully:", result);
-    } catch (error) {
-      console.error("Error adding XP:", error);
-    }
-  };
-
-  // Function to update statistics after completing all exercises
-  const updateFinalStatistics = async () => {
-    const token = getAuthToken();
-    if (!token) {
-      console.error("No auth token found");
-      return;
-    }
-
-    setIsUpdatingStats(true);
-    try {
-      const response = await fetch(
-        "http://localhost:8080/api/user-statistics/update-statistics",
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            exerciseType: "LISTEN_AND_REPEAT",
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to update statistics: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      console.log("Statistics updated successfully:", result);
-    } catch (error) {
-      console.error("Error updating statistics:", error);
-    } finally {
-      setIsUpdatingStats(false);
-    }
-  };
 
   // Fetch all exercises for the lesson on component mount
   useEffect(() => {
@@ -145,7 +72,12 @@ const ListenAndRepeatPage = () => {
 
           // Add XP for this exercise
           if (currentExercise.xpReward) {
-            await addXPForExercise(currentExercise.xpReward);
+            try {
+              await addXpToUser(currentExercise.xpReward);
+            } catch (error) {
+              // XP addition failed, but exercise is still marked as completed
+              console.error("Failed to add XP, but exercise completed");
+            }
           }
         }
       } catch (error) {
@@ -172,7 +104,12 @@ const ListenAndRepeatPage = () => {
   const goToNextExerciseType = async () => {
     // Check if all exercises are completed and update final statistics
     if (completedExercises.size === totalExercises) {
-      await updateFinalStatistics();
+      try {
+        await updateUserStatistics("LISTEN_AND_REPEAT");
+      } catch (error) {
+        // Statistics update failed, but continue to next exercise
+        console.error("Failed to update statistics, but continuing");
+      }
     }
 
     const linkToNextExercise = `/${lessonId}/sentence-arrangement`;
@@ -297,10 +234,9 @@ const ListenAndRepeatPage = () => {
           <div className="lr-next-exercise-container">
             <button
               onClick={goToNextExerciseType}
-              disabled={isUpdatingStats}
               className="lr-next-exercise-button"
             >
-              {isUpdatingStats ? "Updating..." : "Next exercise"}
+              Next exercise
             </button>
             {allExercisesCompleted && (
               <div className="lr-completion-message">
