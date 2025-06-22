@@ -2,6 +2,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import getSentenceArrangementExerciseData from "./data";
+import {
+  addXpToUser,
+  updateUserStatistics,
+} from "../Services/userProgressService";
 import WordsContainer from "./WordsContainer";
 import SentenceArea from "./SentenceArea";
 import Controls from "./Controls";
@@ -27,8 +31,11 @@ const SentenceBuilder = () => {
     message: "",
   });
   const [showCorrectSentence, setShowCorrectSentence] = useState(false);
+  const [completedExercises, setCompletedExercises] = useState(new Set());
+
   const draggedItem = useRef(null);
   const draggedSource = useRef(null);
+  const hasUpdatedStats = useRef(false);
 
   // Fetch exercise data from API
   useEffect(() => {
@@ -55,6 +62,28 @@ const SentenceBuilder = () => {
       loadSentence(0);
     }
   }, [exercises]);
+
+  // Update statistics when all exercises are completed
+  useEffect(() => {
+    const updateStatistics = async () => {
+      if (
+        exercises.length > 0 &&
+        completedExercises.size === exercises.length &&
+        !hasUpdatedStats.current
+      ) {
+        try {
+          hasUpdatedStats.current = true;
+          await updateUserStatistics("SENTENCE_ARRANGEMENT");
+          console.log("Statistics updated successfully");
+        } catch (error) {
+          console.error("Error updating statistics:", error);
+          hasUpdatedStats.current = false; // Reset on error
+        }
+      }
+    };
+
+    updateStatistics();
+  }, [completedExercises, exercises.length]);
 
   const loadSentence = (index) => {
     if (!exercises[index]) return;
@@ -131,7 +160,7 @@ const SentenceBuilder = () => {
     );
   };
 
-  const checkAnswer = () => {
+  const checkAnswer = async () => {
     if (!exercises[currentSentence]) return;
 
     const userSentence = sentenceWords.map((word) => word.text).join(" ");
@@ -139,13 +168,31 @@ const SentenceBuilder = () => {
     const isCorrect =
       userSentence.toLowerCase() === correctSentence.toLowerCase();
 
-    setFeedback({
-      show: true,
-      isCorrect,
-      message: isCorrect
-        ? `Great job! Your sentence is correct. +${exercises[currentSentence].xpReward} XP`
-        : "Not quite right. Try again.",
-    });
+    if (isCorrect) {
+      // Mark this exercise as completed
+      setCompletedExercises((prev) => new Set([...prev, currentSentence]));
+
+      // Add XP for correct answer
+      const xpReward = exercises[currentSentence].xpReward;
+      try {
+        await addXpToUser(xpReward);
+        console.log(`Successfully added ${xpReward} XP to user`);
+      } catch (error) {
+        console.error("Error adding XP:", error);
+      }
+
+      setFeedback({
+        show: true,
+        isCorrect: true,
+        message: `Great job! Your sentence is correct. +${xpReward} XP`,
+      });
+    } else {
+      setFeedback({
+        show: true,
+        isCorrect: false,
+        message: "Not quite right. Try again.",
+      });
+    }
 
     setShowCorrectSentence(!isCorrect);
   };
