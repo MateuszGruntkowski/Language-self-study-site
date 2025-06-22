@@ -1,9 +1,7 @@
 package com.eb.language_self_study.controller;
 
 import com.eb.language_self_study.model.User;
-import com.eb.language_self_study.model.dto.UserDto;
-import com.eb.language_self_study.model.dto.UserLeaderboardEntryDto;
-import com.eb.language_self_study.model.dto.UserProfilePicDto;
+import com.eb.language_self_study.model.dto.*;
 import com.eb.language_self_study.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -49,19 +47,18 @@ public class UserController {
 
         try{
             ObjectMapper objectMapper = new ObjectMapper();
-            User user = objectMapper.readValue(userJson, User.class);
+            RegisterDto registerDto = objectMapper.readValue(userJson, RegisterDto.class);
 
-            User registeredUser = userService.register(user, imageFile);
-            return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
+            AuthResponseDto authResponseDto = userService.register(registerDto, imageFile);
+            return new ResponseEntity<>(authResponseDto, HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
-
-        return userService.verify(user);
+    public AuthResponseDto login(@RequestBody LoginDto loginDto) {
+        return userService.verify(loginDto);
     }
 
     @GetMapping("/ranking")
@@ -77,6 +74,22 @@ public class UserController {
         String username = authentication.getName();
         UserProfilePicDto updatedProfilePic = userService.updateUserProfilePic(username, imageFile);
         return new ResponseEntity<>(updatedProfilePic, HttpStatus.OK);
+    }
+
+    @PatchMapping("/updateProfile")
+    public ResponseEntity<?> updateProfile(
+            Authentication authentication,
+            @RequestBody UserDto userDto) throws IOException {
+
+        String username = authentication.getName();
+
+        try{
+            AuthResponseDto authResponseDto = userService.updateUserProfile(username, userDto);
+            return new ResponseEntity<>(authResponseDto, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 
 }

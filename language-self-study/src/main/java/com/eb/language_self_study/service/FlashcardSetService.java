@@ -17,7 +17,6 @@ import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +51,7 @@ public class FlashcardSetService {
 
     public List<FlashcardSetDto> getFlashcardSetsByUserId(Long userId) {
 
-        if(!userService.userExists(userId)){
+        if(!userService.userExistsById(userId)){
             throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
@@ -134,7 +133,7 @@ public class FlashcardSetService {
 
     public FlashcardSetDto getFlashcardSetById(Long userId, Long setId) {
 
-        if(!userService.userExists(userId)){
+        if(!userService.userExistsById(userId)){
             throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 

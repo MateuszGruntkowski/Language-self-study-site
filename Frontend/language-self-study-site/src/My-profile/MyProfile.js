@@ -48,6 +48,7 @@ const MyProfile = () => {
           user={userData}
           profilePicture={profilePicture}
           setProfilePicture={setProfilePicture}
+          setUserData={setUserData}
         />
       </div>
     </div>

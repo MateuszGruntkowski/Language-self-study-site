@@ -13,16 +13,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByUsername(String username);
 
-//    @Query(value = """
-//        SELECT COUNT(*) + 1 FROM users u
-//        JOIN user_statistics us ON u.user_id = us.user_id
-//        WHERE us.total_xp > (
-//            SELECT us2.total_xp FROM user_statistics us2
-//            WHERE us2.user_id = :userId
-//        )
-//    """, nativeQuery = true)
-//    int findUserRank(@Param("userId") Long userId);
-
     @Query("SELECT u FROM User u JOIN FETCH u.userStatistics ORDER BY u.userStatistics.totalXp DESC")
     List<User> findTopUsersByXp(Pageable pageable);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 }

@@ -5,17 +5,13 @@ import com.eb.language_self_study.mappers.impl.FlashcardMapperImpl;
 import com.eb.language_self_study.mappers.impl.FlashcardSetMapperImpl;
 import com.eb.language_self_study.model.Flashcard;
 import com.eb.language_self_study.model.FlashcardSet;
-import com.eb.language_self_study.model.User;
 import com.eb.language_self_study.model.dto.FlashcardDto;
 import com.eb.language_self_study.model.dto.FlashcardSetDto;
-import com.eb.language_self_study.model.dto.UserDto;
 import com.eb.language_self_study.repository.FlashcardRepository;
 import com.eb.language_self_study.repository.FlashcardSetRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FlashcardService {
@@ -43,7 +39,7 @@ public class FlashcardService {
 
     public List<FlashcardDto> getFlashcardsBySetId(Long userId, Long flashcardSetId) {
 
-        if(!userService.userExists(userId)){
+        if(!userService.userExistsById(userId)){
             throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
@@ -60,7 +56,7 @@ public class FlashcardService {
 
     public FlashcardDto getFlashcardById(Long userId, Long flashcardSetId, Long flashcardId) {
 
-        if(!userService.userExists(userId)){
+        if(!userService.userExistsById(userId)){
             throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
@@ -78,7 +74,7 @@ public class FlashcardService {
 
     public void deleteFlashcard(Long userId, Long setId, Long flashcardId) {
 
-        if(!userService.userExists(userId)){
+        if(!userService.userExistsById(userId)){
             throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
@@ -92,7 +88,7 @@ public class FlashcardService {
 
     public FlashcardDto createFlashcard(Long userId, Long setId, FlashcardDto flashcardDto) {
 
-        if(!userService.userExists(userId)){
+        if(!userService.userExistsById(userId)){
             throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
@@ -112,7 +108,7 @@ public class FlashcardService {
 
     public FlashcardDto updateFlashcard(Long userId, Long setId, Long flashcardId, FlashcardDto flashcardDto) {
 
-        if(!userService.userExists(userId)) {
+        if(!userService.userExistsById(userId)) {
             throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 

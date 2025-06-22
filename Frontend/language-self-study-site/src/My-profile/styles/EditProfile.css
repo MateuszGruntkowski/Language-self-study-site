@@ -1,4 +1,6 @@
-.edit-profile {
+/* EditProfile Component Styles - Scoped to avoid conflicts */
+
+.edit-profile-container {
   flex: 1;
   background-color: white;
   border-radius: 8px;
@@ -7,11 +9,11 @@
   transition: transform 0.3s;
 }
 
-.edit-profile:hover {
+.edit-profile-container:hover {
   transform: translateY(-5px);
 }
 
-.edit-profile-title {
+.edit-profile-heading {
   font-size: 24px;
   color: #2c3e50;
   margin-bottom: 30px;
@@ -19,7 +21,7 @@
   padding-bottom: 10px;
 }
 
-.edit-profile-title:after {
+.edit-profile-heading:after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -29,17 +31,17 @@
   background-color: #3498db;
 }
 
-.form-group {
+.edit-profile-form-group {
   margin-bottom: 25px;
 }
 
-.form-group label {
+.edit-profile-form-group label {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
 }
 
-.form-control {
+.edit-profile-input {
   width: 100%;
   padding: 12px;
   border: 1px solid #ddd;
@@ -48,12 +50,12 @@
   transition: border-color 0.3s;
 }
 
-.form-control:focus {
+.edit-profile-input:focus {
   outline: none;
   border-color: #3498db;
 }
 
-.select-control {
+.edit-profile-select {
   width: 100%;
   padding: 12px;
   border: 1px solid #ddd;
@@ -63,7 +65,7 @@
   cursor: pointer;
 }
 
-.save-btn {
+.edit-profile-save-btn {
   background-color: #3498db;
   color: white;
   padding: 12px 24px;
@@ -75,13 +77,12 @@
   transition: background-color 0.3s;
 }
 
-.save-btn:hover {
+.edit-profile-save-btn:hover {
   background-color: #2980b9;
 }
 
-/* Dodaj te style do EditProfile.css */
-
-.profile-pic-section {
+/* Profile Picture Section */
+.edit-profile-pic-section {
   margin-bottom: 30px;
   padding: 20px;
   background: #f8f9fa;
@@ -89,7 +90,7 @@
   border: 1px solid #e9ecef;
 }
 
-.profile-pic-container {
+.edit-profile-pic-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -97,11 +98,11 @@
   margin-top: 10px;
 }
 
-.current-profile-pic {
+.edit-profile-current-pic {
   flex-shrink: 0;
 }
 
-.profile-pic-preview {
+.edit-profile-pic-preview {
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -110,7 +111,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.profile-pic-placeholder {
+.edit-profile-pic-placeholder {
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -121,25 +122,25 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.pic-initials {
+.edit-profile-pic-initials {
   color: white;
   font-size: 36px;
   font-weight: bold;
   text-transform: uppercase;
 }
 
-.profile-pic-actions {
+.edit-profile-pic-actions {
   display: flex;
   flex-direction: column;
   gap: 10px;
   align-items: center;
 }
 
-.file-input {
+.edit-profile-file-input {
   display: none;
 }
 
-.upload-btn {
+.edit-profile-upload-btn {
   display: inline-block;
   background: #3498db;
   color: white;
@@ -153,34 +154,30 @@
   border: none;
 }
 
-.upload-btn:hover {
+.edit-profile-upload-btn:hover {
   background: #2980b9;
 }
 
-/* .remove-btn {
-  background: #dc3545;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: background-color 0.2s;
+/* Messages */
+.edit-profile-success-message {
+  margin-top: 15px;
+  color: green;
+  font-weight: bold;
 }
 
-.remove-btn:hover {
-  background: #c82333;
-} */
+.edit-profile-error-message {
+  margin-top: 15px;
+  color: red;
+  font-weight: bold;
+}
 
 /* Responsive design dla mniejszych ekranów */
 @media (max-width: 768px) {
-  .profile-pic-container {
+  .edit-profile-pic-container {
     gap: 12px;
   }
 
-  .upload-btn,
-  .remove-btn {
+  .edit-profile-upload-btn {
     width: 200px;
   }
 }

@@ -5,6 +5,7 @@ import "./styles/SignUp.css";
 
 const SignUp = () => {
   const usernameRef = useRef(null);
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -47,6 +48,10 @@ const SignUp = () => {
   const removeImage = () => {
     setImageFile(null);
     setPreviewImage(null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -87,12 +92,14 @@ const SignUp = () => {
       );
 
       if (response.status === 200 || response.status === 201) {
+        localStorage.setItem("token", response.data.token);
         setSuccess("Rejestracja zakończona sukcesem!");
-        setTimeout(() => navigate("/login"), 2000); // przekieruj po 2 sek.
+        // setTimeout(() => navigate("/learn"), 1000); // przekieruj po 2 sek.
+        navigate("/learn"); // przekieruj od razu
       }
     } catch (err) {
       const msg =
-        err.response?.data?.message ||
+        err.response?.data ||
         "Wystąpił błąd podczas rejestracji. Spróbuj ponownie.";
       setError(msg);
     }
@@ -182,6 +189,7 @@ const SignUp = () => {
               accept="image/*"
               onChange={handleImageChange}
               className="file-input"
+              ref={fileInputRef}
             />
 
             {previewImage && (

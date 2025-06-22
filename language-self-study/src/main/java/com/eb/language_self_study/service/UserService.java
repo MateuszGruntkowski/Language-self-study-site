@@ -1,12 +1,14 @@
 package com.eb.language_self_study.service;
 
+import com.eb.language_self_study.exceptions.EmailAlreadyExistsException;
 import com.eb.language_self_study.exceptions.ResourceNotFoundException;
+import com.eb.language_self_study.exceptions.UsernameAlreadyExistsException;
 import com.eb.language_self_study.mappers.impl.UserMapperImpl;
 import com.eb.language_self_study.model.User;
-import com.eb.language_self_study.model.dto.UserDto;
-import com.eb.language_self_study.model.dto.UserLeaderboardEntryDto;
-import com.eb.language_self_study.model.dto.UserProfilePicDto;
+import com.eb.language_self_study.model.UserStatistics;
+import com.eb.language_self_study.model.dto.*;
 import com.eb.language_self_study.repository.UserRepository;
+import com.eb.language_self_study.repository.UserStatisticsRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
+    private final UserStatisticsRepository userStatisticsRepository;
     private UserRepository userRepository;
     private JwtService jwtService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -33,15 +36,26 @@ public class UserService {
                        BCryptPasswordEncoder bCryptPasswordEncoder,
                        AuthenticationManager authenticationManager,
                        JwtService jwtService,
-                       UserMapperImpl userMapper) {
+                       UserMapperImpl userMapper, UserStatisticsRepository userStatisticsRepository) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.userMapper = userMapper;
+        this.userStatisticsRepository = userStatisticsRepository;
     }
 
-    public User register(User user, MultipartFile imageFile) throws IOException {
+    public AuthResponseDto register(RegisterDto registerDto, MultipartFile imageFile) throws IOException {
+
+        if(userRepository.existsByUsername(registerDto.getUsername())) {
+            throw new UsernameAlreadyExistsException("Użytkownik o tej nazwie już istnieje");
+        }
+        if(userRepository.existsByEmail(registerDto.getEmail())) {
+            throw new EmailAlreadyExistsException("Ten email jest już zajęty");
+        }
+
+        User user = userMapper.mapFromRegisterDto(registerDto);
+
         if (imageFile != null && !imageFile.isEmpty()) {
             user.setProfilePicName(imageFile.getOriginalFilename());
             user.setProfilePicType(imageFile.getContentType());
@@ -49,7 +63,18 @@ public class UserService {
         }
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        UserStatistics userStatistics = new UserStatistics();
+        userStatistics.setUser(user);
+        userStatisticsRepository.save(userStatistics);
+
+        String token = jwtService.generateToken(user.getUsername());
+        return new AuthResponseDto(token,
+                user.getUserId(),
+                user.getUsername(),
+                user.getEmail(),
+                "User registered successfully");
     }
 
     public List<UserDto> getUsers() {
@@ -57,14 +82,25 @@ public class UserService {
         return users.stream().map(user -> userMapper.mapToDto(user)).collect(Collectors.toList());
     }
 
-    public String verify(User user) {
+    public AuthResponseDto verify(LoginDto loginDto) {
+
+        User user = userRepository.findByUsername(loginDto.getUsername());
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found");
+        }
+
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
 
         if(authentication.isAuthenticated()){
-            return jwtService.generateToken(user.getUsername());
+            String token = jwtService.generateToken(user.getUsername());
+            return new AuthResponseDto(token,
+                    user.getUserId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    "User authenticated successfully");
         }
-        return "User not authenticated";
+        return new AuthResponseDto(null, null, null, null, "Authentication failed");
     }
 
     public UserDto getUserByUsername(String username) {
@@ -103,10 +139,6 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public boolean userExists(Long userId) {
-        return userRepository.existsById(userId);
-    }
-
     public String encodeProfilePicToBase64(User user){
         String base64 = null;
         byte[] imageData = user.getProfilePicData();
@@ -136,5 +168,44 @@ public class UserService {
                 user.getProfilePicType(),
                 encodeProfilePicToBase64(user)
         );
+    }
+
+    public AuthResponseDto updateUserProfile(String username, UserDto userDto) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found");
+        }
+
+        String newUsername = userDto.getUsername();
+        if (newUsername != null && !newUsername.isEmpty() && !newUsername.equals(user.getUsername())) {
+            if (userRepository.existsByUsername(newUsername)) {
+                throw new UsernameAlreadyExistsException("Username already exists");
+            }
+            user.setUsername(userDto.getUsername());
+        }
+
+        if(userDto.getEmail() != null && !userDto.getEmail().isEmpty() && !userDto.getEmail().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(userDto.getEmail())) {
+                throw new EmailAlreadyExistsException("Email already exists");
+            }
+            user.setEmail(userDto.getEmail());
+        }
+
+        userRepository.save(user);
+        String token = jwtService.generateToken(user.getUsername());
+
+        return new AuthResponseDto(token,
+                user.getUserId(),
+                user.getUsername(),
+                user.getEmail(),
+                "User profile updated successfully");
+    }
+
+    public boolean userExistsById(Long userId) {
+        return userRepository.existsById(userId);
+    }
+
+    public boolean userExistsByUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 }

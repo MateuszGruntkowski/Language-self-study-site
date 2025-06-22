@@ -50,12 +50,10 @@ const Login = () => {
       if (response.status === 200) {
         navigate("/learn"); // przekieruj po 1 sek.
 
-        const token = response.data;
+        const token = response.data.token;
         localStorage.setItem("token", token);
 
         console.log("Zalogowano pomyślnie:", response.data);
-        // Ustawienie tokena w nagłówkach axios
-        // axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       }
     } catch (error) {
       console.error("Błąd logowania:", error);
@@ -78,7 +76,7 @@ const Login = () => {
         <form id="login-form" onSubmit={handleSubmit}>
           <div class="form-group">
             <label for="email">
-              Username<span class="required">*</span>
+              Nazwa użytkownika<span class="required">*</span>
             </label>
             <input
               type="username"
@@ -106,7 +104,7 @@ const Login = () => {
             {error && <div className="error">{error}</div>}
           </div>
 
-          <div class="login-actions">
+          {/* <div class="login-actions">
             <div class="remember-me">
               <input type="checkbox" id="remember" name="remember" />
               <label for="remember">Zapamiętaj mnie</label>
@@ -114,7 +112,7 @@ const Login = () => {
             <a href="#" class="forgot-password">
               Zapomniałeś hasła?
             </a>
-          </div>
+          </div> */}
 
           <button type="submit">Zaloguj się</button>
 
