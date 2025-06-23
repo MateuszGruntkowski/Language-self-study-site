@@ -1,133 +1,80 @@
 classDiagram
     class User {
-        -Long id
-        -String username
-        -String email
-        -String password
-        -int totalXp
-        -Date createdAt
-        +getCompletedLessons()
-        +getFlashcards()
-        +addXp(int xp)
-        +getLeaderboardPosition()
+        +userId: Long
+        +username: String
+        +email: String
+        +password: String
+        +createdAt: Date
+        +profilePicName: String
+        +profilePicType: String
+        +profilPicData: byte[]
     }
-   
+    
     class UserStatistics {
-        -Long id
-        -int totalHoursSpent
-        -int dailyStreak
-        -Date lastActive
-        -int completedLessonsCount
-        -int completedExercisesCount
-        -int listenAndRepeatCount
-        -int sentenceArrangementCount
-        -int translationQuizCount
-        -int leaderboardRank
-        +updateDailyStreak()
-        +calculateTotalHours()
-        +incrementExerciseCount(String type)
-        +updateLeaderboardRank()
+        +userId: Long
+        +totalXp: int
+        +completedExercisesCount: int
+        +listenAndRepeatCount: int
+        +sentenceArrangementCount: int
+        +translationQuizCount: int
     }
-   
-    class UserSession {
-        -Long id
-        -Date startTime
-        -Date endTime
-        -int sessionDurationMinutes
-        +calculateDuration()
+    
+    class FlashcardSet {
+        +flashcardSetId: Long
+        +name: String
+        +createdAt: Date
     }
-   
-    class Lesson {
-        -Long id
-        -String title
-        -String category
-        -int difficultyLevel
-        -int xpReward
-        -boolean isActive
-        +getExercises()
-    }
-   
-    class Exercise {
-        -Long id
-        -String type
-        -int orderInLesson
-        -int xpReward
-        +getContent()
-    }
-   
-    class ListenAndRepeatExercise {
-        -String audioUrl
-        -String textToRepeat
-        -String translation
-        +evaluateAnswer(String answer)
-    }
-   
-    class SentenceArrangementExercise {
-        -String correctSentence
-        -String[] wordOptions
-        -String translation
-        +evaluateAnswer(String[] arrangement)
-    }
-   
-    class TranslationQuizExercise {
-        -String question
-        -String[] options
-        -int correctOptionIndex
-        -String translation
-        +evaluateAnswer(int selectedOption)
-    }
-   
+    
     class Flashcard {
-        -Long id
-        -String frontContent
-        -String backContent
-        -Date createdAt
-        -int repetitionCount
-        +updateRepetitionCount()
+        +id: Long
+        +front: String
+        +back: String
+        +difficulty: Integer
+        +createdAt: DateTime
     }
-   
-    class UserLessonProgress {
-        -Long id
-        -Date startedAt
-        -Date completedAt
-        -int earnedXp
-        -boolean isCompleted
-        +markAsCompleted()
+    
+    class Lesson {
+        +flashcardId: Long
+        +frontContent: String
+        +backContent: String
+        +repetitionCount: int
+        +createdAt: Date
+        +xpReward: int
     }
-   
-    class UserExerciseAttempt {
-        -Long id
-        -boolean isCorrect
-        -int attemptNumber
-        -Date attemptTime
-        -int earnedXp
+    
+    class Exercise {
+        +exerciseId: Long
+        +type: String
+        +xpReward: int
+        +orderInLesson: int
+        +description: String
     }
-   
-    class Leaderboard {
-        -List~LeaderboardEntry~ entries
-        +getTopUsers(int limit)
-        +getUserRank(Long userId)
-        +updateLeaderboard()
+    
+    class ListenAndRepeatExercise {
+        +textToRepeat: String
+        +translation: String
     }
-   
-    class LeaderboardEntry {
-        -Long userId
-        -String username
-        -int totalXp
-        -int rank
+    
+    class TranslationQuizExercise {
+        +question: String
+        +options: String <<"JSON">>
+        +correctOptionIndex: int
+        +translation: String
+    }
+    
+    class SentenceArrangementExercise {
+        +correctSentence: String
+        +wordOptions: String <<"JSON">>
+        +translation: String
     }
 
+User "1" -- "many" FlashcardSet : "ma wiele"
+User "1" -- "1" UserStatistics : "ma jedną"
 
-    User "1" -- "1" UserStatistics : has
-    User "1" -- "many" UserSession : logs
-    User "1" -- "many" Flashcard : creates
-    User "1" -- "many" UserLessonProgress : has
-    Lesson "1" -- "many" Exercise : contains
-    Lesson "1" -- "many" UserLessonProgress : tracked in
-    Exercise <|-- ListenAndRepeatExercise : extends
-    Exercise <|-- SentenceArrangementExercise : extends
-    Exercise <|-- TranslationQuizExercise : extends
-    Exercise "1" -- "many" UserExerciseAttempt : has
-    UserLessonProgress "1" -- "many" UserExerciseAttempt : includes
-    Leaderboard "1" -- "many" LeaderboardEntry : contains
-    LeaderboardEntry "1" -- "1" User : represents
+FlashcardSet "1" -- "many" Flashcard : "zawiera wiele"
+
+Lesson "1" -- "many" Exercise : "zawiera wiele"
+
+Exercise <|-- ListenAndRepeatExercise
+Exercise <|-- TranslationQuizExercise
+Exercise <|-- SentenceArrangementExercise
