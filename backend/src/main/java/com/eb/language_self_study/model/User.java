@@ -41,9 +41,9 @@ public class User {
     @ToString.Exclude
     private List<FlashcardSet> flashcardSets;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private Set<UserLessonProgress> userLessonProgresses;
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @ToString.Exclude
+//    private Set<UserLessonProgress> userLessonProgresses;
 
     @PrePersist
     protected void onCreate() {

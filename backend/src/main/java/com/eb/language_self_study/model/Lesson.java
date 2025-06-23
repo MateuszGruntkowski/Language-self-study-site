@@ -28,8 +28,8 @@ public class Lesson {
     @JsonManagedReference
     private List<Exercise> exercises;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserLessonProgress> userLessonProgresses;
+//    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<UserLessonProgress> userLessonProgresses;
 
     public void updateXpReward() {
         if(exercises == null || exercises.isEmpty()) {
