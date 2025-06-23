@@ -10,39 +10,42 @@ const Features = () => {
         <div class="features-container">
           <div class="features-content">
             <p>
-              Nasza platforma oferuje kompleksowe i spersonalizowane podejście
-              do nauki języka angielskiego. Dzięki najnowszym technologiom i
-              sprawdzonym metodom nauczania, osiągniesz swoje cele językowe
-              szybciej i efektywniej.
+              Nasza platforma łączy naukę słownictwa z interaktywnymi
+              ćwiczeniami i elementami grywalizacji. Dzięki angażującej formie i
+              przejrzystemu systemowi postępów uczysz się efektywnie, we własnym
+              tempie - z większą motywacją i satysfakcją.
             </p>
             <div class="feature-list">
               <div class="feature-item">
                 <div class="feature-icon">✓</div>
                 <div>
-                  <h3>Spersonalizowany plan nauki</h3>
+                  <h3>Różnorodne zadania i fiszki</h3>
                   <p>
-                    Nasz system dobiera materiały i ćwiczenia indywidualnie do
-                    Twoich potrzeb i poziomu zaawansowania.
+                    Poznajesz nowe słowa poprzez fiszki, quizy tłumaczeniowe,
+                    układanie zdań czy ćwiczenia typu „posłuchaj i powtórz” -
+                    tak, by łatwiej zapamiętać i utrwalić materiał.
                   </p>
                 </div>
               </div>
               <div class="feature-item">
                 <div class="feature-icon">✓</div>
                 <div>
-                  <h3>Interaktywne ćwiczenia</h3>
+                  <h3>Punkty, ranking i dodatkowa motywacja</h3>
                   <p>
-                    Nauka poprzez praktyczne zadania i interakcje, które
-                    angażują wszystkie zmysły.
+                    Każde wykonane zadanie to kolejne punkty doświadczenia i
+                    awans w rankingu. Nauka staje się grą, w której chcesz
+                    sięgać coraz wyżej.
                   </p>
                 </div>
               </div>
               <div class="feature-item">
                 <div class="feature-icon">✓</div>
                 <div>
-                  <h3>Natychmiastowa informacja zwrotna</h3>
+                  <h3>Twoje postępy zawsze pod ręką</h3>
                   <p>
-                    Otrzymuj informacje o swoich postępach na bieżąco i ucz się
-                    na własnych błędach.
+                    W panelu użytkownika masz dostęp do liczby wykonanych zadań,
+                    zdobytych punktów i własnych statystyk - wszystko w jednym
+                    miejscu, by śledzić rozwój i utrzymać rytm nauki.
                   </p>
                 </div>
               </div>
