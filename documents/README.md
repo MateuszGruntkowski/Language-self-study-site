@@ -300,7 +300,89 @@ graph TB
     class G,H data
     class I external
 ```
+## Class Diagram
+```mermaid
+classDiagram
+    class User {
+        +userId: Long
+        +username: String
+        +email: String
+        +password: String
+        +createdAt: Date
+        +profilePicName: String
+        +profilePicType: String
+        +profilPicData: byte[]
+    }
+    
+    class UserStatistics {
+        +userId: Long
+        +totalXp: int
+        +completedExercisesCount: int
+        +listenAndRepeatCount: int
+        +sentenceArrangementCount: int
+        +translationQuizCount: int
+    }
+    
+    class FlashcardSet {
+        +flashcardSetId: Long
+        +name: String
+        +createdAt: Date
+    }
+    
+    class Flashcard {
+        +id: Long
+        +front: String
+        +back: String
+        +difficulty: Integer
+        +createdAt: DateTime
+    }
+    
+    class Lesson {
+        +flashcardId: Long
+        +frontContent: String
+        +backContent: String
+        +repetitionCount: int
+        +createdAt: Date
+        +xpReward: int
+    }
+    
+    class Exercise {
+        +exerciseId: Long
+        +type: String
+        +xpReward: int
+        +orderInLesson: int
+        +description: String
+    }
+    
+    class ListenAndRepeatExercise {
+        +textToRepeat: String
+        +translation: String
+    }
+    
+    class TranslationQuizExercise {
+        +question: String
+        +options: String <<"JSON">>
+        +correctOptionIndex: int
+        +translation: String
+    }
+    
+    class SentenceArrangementExercise {
+        +correctSentence: String
+        +wordOptions: String <<"JSON">>
+        +translation: String
+    }
 
+User "1" -- "many" FlashcardSet : "ma wiele"
+User "1" -- "1" UserStatistics : "ma jedną"
+
+FlashcardSet "1" -- "many" Flashcard : "zawiera wiele"
+
+Lesson "1" -- "many" Exercise : "zawiera wiele"
+
+Exercise <|-- ListenAndRepeatExercise
+Exercise <|-- TranslationQuizExercise
+Exercise <|-- SentenceArrangementExercise
+```
 ## Notes
 
 - The flashcard functionality is fully implemented in the backend but lacks frontend implementation due to time constraints
